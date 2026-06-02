@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="books-header py-5">
+    <div class="container text-center">
+        <h1>SmartBooks Library</h1>
+        <p>Explore books from different categories and discover your next read.</p>
+
+        <form method="GET" action="{{ url_for('books') }}" class="search-box mt-4">
+            <div class="input-group">
+                <input type="text"
+                       name="search"
+                       class="form-control form-control-lg"
+                       placeholder="Search by title or author..."
+                       value="{{ search }}">
+
+                <button class="btn btn-warning" type="submit">
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="container py-5">
+
+    <div class="row g-4">
+
+        {% for book in books %}
+
+        <div class="col-md-4 col-lg-3 col-sm-6">
+
+            <div class="card book-card h-100 shadow-sm">
+
+                <div class="book-cover-placeholder">
+                    <span>{{ book.title[0] }}</span>
+                </div>
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        {{ book.title }}
+                    </h5>
+
+                    <p class="card-text text-muted mb-1">
+                        {{ book.author }}
+                    </p>
+
+                    <p class="small text-primary mb-1">
+                        Published: {{ book.published_year }}
+                    </p>
+
+                    <p class="small">
+                        {{ book.description }}
+                    </p>
+
+                    {% if session.get("user_id") %}
+
+                        {% if book.id in favorite_book_ids %}
+
+                            <button class="btn btn-success btn-sm w-100" disabled>
+                                Added to Favorites
+                            </button>
+
+                        {% else %}
+
+                            <a href="{{ url_for('add_favorite', book_id=book.id) }}"
+                               class="btn btn-outline-warning btn-sm w-100">
+                                Add to Favorites
+                            </a>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <a href="{{ url_for('login') }}"
+                           class="btn btn-outline-primary btn-sm w-100">
+                            Login to Save
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12 text-center">
+            <h4>No books found.</h4>
+            <p>Try another search keyword.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

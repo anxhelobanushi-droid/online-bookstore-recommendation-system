@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="books-header py-5">
+    <div class="container text-center">
+        <h1>My Recommendations</h1>
+        <p>Personalized book suggestions based on your favorite books.</p>
+    </div>
+</section>
+
+<section class="container py-5">
+
+    <h2 class="mb-4">Your Favorite Books</h2>
+
+    <div class="row g-4 mb-5">
+
+        {% for book in favorite_books %}
+
+        <div class="col-md-4 col-lg-3 col-sm-6">
+
+            <div class="card book-card h-100 shadow-sm">
+
+                <div class="book-cover-placeholder">
+                    <span>{{ book.title[0] }}</span>
+                </div>
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        {{ book.title }}
+                    </h5>
+
+                    <p class="card-text text-muted">
+                        {{ book.author }}
+                    </p>
+
+                    <p class="small text-primary">
+                        {{ book.category.name }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+            <div class="alert alert-info">
+                You have not added any favorite books yet. Go to the Books page and add some books.
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <h2 class="mb-4">Recommended for You</h2>
+
+    <div class="row g-4">
+
+        {% for book in recommended_books %}
+
+        <div class="col-md-4 col-lg-3 col-sm-6">
+
+            <div class="card book-card h-100 shadow-sm">
+
+                <div class="book-cover-placeholder recommendation-cover">
+                    <span>{{ book.title[0] }}</span>
+                </div>
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        {{ book.title }}
+                    </h5>
+
+                    <p class="card-text text-muted">
+                        {{ book.author }}
+                    </p>
+
+                    <p class="small text-primary">
+                        Category: {{ book.category.name }}
+                    </p>
+
+                    <p class="small">
+                        Recommended because it belongs to a category you liked.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+            <div class="alert alert-warning">
+                No recommendations available yet. Add more favorite books to improve your recommendations.
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

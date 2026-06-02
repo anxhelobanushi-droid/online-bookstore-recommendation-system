@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth-section">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-md-6 col-lg-5">
+
+                <div class="card auth-card shadow-lg">
+
+                    <div class="card-body p-4">
+
+                        <h2 class="text-center mb-3">Login</h2>
+
+                        <p class="text-center text-muted mb-4">
+                            Access your SmartBooks account.
+                        </p>
+
+                        <form method="POST">
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" name="password" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                Login
+                            </button>
+
+                        </form>
+
+                        <p class="text-center mt-3 mb-0">
+                            Don't have an account?
+                            <a href="{{ url_for('register') }}">Register here</a>
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
