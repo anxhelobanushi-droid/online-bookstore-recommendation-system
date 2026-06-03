@@ -100,3 +100,33 @@ footer {
     color: #1e5eff;
     font-weight: 800;
 }
+
+.dashboard-card {
+    border-radius: 16px;
+}
+
+.dashboard-card h3 {
+    color: #1e5eff;
+    font-weight: 800;
+}
+
+.dashboard-card p {
+    margin-bottom: 0;
+    color: #6c757d;
+}
+
+.book-cover-img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 6px 6px 0 0;
+    background-color: #f1f3f5;
+}
+
+.book-details-img {
+    width: 100%;
+    height: 520px;
+    object-fit: cover;
+    border-radius: 18px;
+    background-color: #f1f3f5;
+}

@@ -13,9 +13,295 @@ app.config.from_object(Config)
 db.init_app(app)
 
 
+def admin_required():
+    if not session.get("user_id"):
+        flash("Please login to access this page.", "warning")
+        return False
+
+    if session.get("role") != "admin":
+        flash("Access denied. Admin privileges are required.", "danger")
+        return False
+
+    return True
+
+
 @app.route("/")
 def home():
     return render_template("index.html")
+
+@app.route("/ml-info")
+def ml_info():
+
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    return render_template("ml_info.html")
+
+@app.route("/dashboard")
+def dashboard():
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    total_books = Book.query.count()
+    total_categories = Category.query.count()
+    total_users = User.query.count()
+    total_favorites = Favorite.query.count()
+    total_ratings = Rating.query.count()
+
+    categories = Category.query.all()
+    books = Book.query.all()
+    users = User.query.all()
+
+    category_stats = []
+    for category in categories:
+        category_stats.append({
+            "name": category.name,
+            "count": Book.query.filter_by(category_id=category.id).count()
+        })
+
+    top_rated_books = []
+    for book in books:
+        ratings = Rating.query.filter_by(book_id=book.id).all()
+
+        if ratings:
+            average_rating = round(
+                sum(rating.rating for rating in ratings) / len(ratings),
+                1
+            )
+
+            top_rated_books.append({
+                "book": book,
+                "average_rating": average_rating,
+                "rating_count": len(ratings)
+            })
+
+    top_rated_books = sorted(
+        top_rated_books,
+        key=lambda x: x["average_rating"],
+        reverse=True
+    )[:5]
+
+    most_favorited_books = []
+    for book in books:
+        favorite_count = Favorite.query.filter_by(book_id=book.id).count()
+
+        if favorite_count > 0:
+            most_favorited_books.append({
+                "book": book,
+                "favorite_count": favorite_count
+            })
+
+    most_favorited_books = sorted(
+        most_favorited_books,
+        key=lambda x: x["favorite_count"],
+        reverse=True
+    )[:5]
+
+    active_users = []
+    for user in users:
+        user_favorites = Favorite.query.filter_by(user_id=user.id).count()
+        user_ratings = Rating.query.filter_by(user_id=user.id).count()
+
+        activity_score = user_favorites + user_ratings
+
+        if activity_score > 0:
+            active_users.append({
+                "user": user,
+                "favorites": user_favorites,
+                "ratings": user_ratings,
+                "activity_score": activity_score
+            })
+
+    active_users = sorted(
+        active_users,
+        key=lambda x: x["activity_score"],
+        reverse=True
+    )[:5]
+
+    precision_demo = 84
+    recall_demo = 78
+    f1_demo = 81
+
+    return render_template(
+        "dashboard.html",
+        total_books=total_books,
+        total_categories=total_categories,
+        total_users=total_users,
+        total_favorites=total_favorites,
+        total_ratings=total_ratings,
+        category_stats=category_stats,
+        top_rated_books=top_rated_books,
+        most_favorited_books=most_favorited_books,
+        active_users=active_users,
+        precision_demo=precision_demo,
+        recall_demo=recall_demo,
+        f1_demo=f1_demo
+    )
+
+
+@app.route("/admin/books")
+def admin_books():
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    books = Book.query.all()
+    total_categories = Category.query.count()
+
+    return render_template(
+        "admin_books.html",
+        books=books,
+        total_categories=total_categories
+    )
+
+
+@app.route("/admin/books/add", methods=["GET", "POST"])
+def add_book():
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    categories = Category.query.all()
+
+    if request.method == "POST":
+        new_book = Book(
+            title=request.form["title"],
+            author=request.form["author"],
+            category_id=request.form["category_id"],
+            published_year=request.form["published_year"],
+            image=request.form["image"],
+            description=request.form["description"]
+        )
+
+        db.session.add(new_book)
+        db.session.commit()
+
+        flash("Book added successfully.", "success")
+        return redirect(url_for("admin_books"))
+
+    return render_template("add_book.html", categories=categories)
+
+
+@app.route("/admin/books/edit/<int:book_id>", methods=["GET", "POST"])
+def edit_book(book_id):
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    book = Book.query.get_or_404(book_id)
+    categories = Category.query.all()
+
+    if request.method == "POST":
+        book.title = request.form["title"]
+        book.author = request.form["author"]
+        book.category_id = request.form["category_id"]
+        book.published_year = request.form["published_year"]
+        book.image = request.form["image"]
+        book.description = request.form["description"]
+
+        db.session.commit()
+
+        flash("Book updated successfully.", "success")
+        return redirect(url_for("admin_books"))
+
+    return render_template(
+        "edit_book.html",
+        book=book,
+        categories=categories
+    )
+
+
+@app.route("/admin/books/delete/<int:book_id>", methods=["POST"])
+def delete_book(book_id):
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    book = Book.query.get_or_404(book_id)
+
+    Favorite.query.filter_by(book_id=book.id).delete()
+    Rating.query.filter_by(book_id=book.id).delete()
+
+    db.session.delete(book)
+    db.session.commit()
+
+    flash("Book deleted successfully.", "success")
+    return redirect(url_for("admin_books"))
+
+
+@app.route("/admin/categories")
+def admin_categories():
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    categories = Category.query.all()
+
+    return render_template(
+        "admin_categories.html",
+        categories=categories
+    )
+
+
+@app.route("/admin/categories/add", methods=["GET", "POST"])
+def add_category():
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        name = request.form["name"]
+
+        existing_category = Category.query.filter_by(name=name).first()
+
+        if existing_category:
+            flash("Category already exists.", "warning")
+            return redirect(url_for("add_category"))
+
+        new_category = Category(name=name)
+
+        db.session.add(new_category)
+        db.session.commit()
+
+        flash("Category added successfully.", "success")
+        return redirect(url_for("admin_categories"))
+
+    return render_template("add_category.html")
+
+
+@app.route("/admin/categories/edit/<int:category_id>", methods=["GET", "POST"])
+def edit_category(category_id):
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    category = Category.query.get_or_404(category_id)
+
+    if request.method == "POST":
+        category.name = request.form["name"]
+
+        db.session.commit()
+
+        flash("Category updated successfully.", "success")
+        return redirect(url_for("admin_categories"))
+
+    return render_template(
+        "edit_category.html",
+        category=category
+    )
+
+
+@app.route("/admin/categories/delete/<int:category_id>", methods=["POST"])
+def delete_category(category_id):
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    category = Category.query.get_or_404(category_id)
+
+    books_in_category = Book.query.filter_by(category_id=category.id).count()
+
+    if books_in_category > 0:
+        flash("This category cannot be deleted because it contains books.", "danger")
+        return redirect(url_for("admin_categories"))
+
+    db.session.delete(category)
+    db.session.commit()
+
+    flash("Category deleted successfully.", "success")
+    return redirect(url_for("admin_categories"))
 
 
 @app.route("/books")
@@ -89,13 +375,19 @@ def book_details(book_id):
         if rating:
             user_rating = rating.rating
 
+    similar_books = Book.query.filter(
+        Book.category_id == book.category_id,
+        Book.id != book.id
+    ).limit(4).all()
+
     return render_template(
         "book_details.html",
         book=book,
         is_favorite=is_favorite,
         user_rating=user_rating,
         average_rating=average_rating,
-        rating_count=len(ratings)
+        rating_count=len(ratings),
+        similar_books=similar_books
     )
 
 
@@ -165,6 +457,9 @@ def rate_book(book_id):
 
 @app.route("/import-books-csv")
 def import_books_csv():
+    if not admin_required():
+        return redirect(url_for("login"))
+
     Favorite.query.delete()
     Rating.query.delete()
     Book.query.delete()
@@ -238,7 +533,7 @@ def recommendations():
     favorite_books = Book.query.filter(Book.id.in_(favorite_book_ids)).all()
     all_books = Book.query.all()
 
-    recommended_books = get_content_based_recommendations(
+    recommended_items = get_content_based_recommendations(
         all_books=all_books,
         favorite_books=favorite_books,
         top_n=8
@@ -247,7 +542,7 @@ def recommendations():
     return render_template(
         "recommendations.html",
         favorite_books=favorite_books,
-        recommended_books=recommended_books
+        recommended_items=recommended_items
     )
 
 

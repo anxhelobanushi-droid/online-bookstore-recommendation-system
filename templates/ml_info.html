@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="books-header py-5">
+    <div class="container text-center">
+        <h1>Machine Learning Information</h1>
+        <p>
+            Explanation of the recommendation algorithm used in SmartBooks.
+        </p>
+    </div>
+</section>
+
+<section class="container py-5">
+
+    <div class="row g-4">
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h3 class="fw-bold mb-3">Content-Based Filtering</h3>
+                    <p>
+                        SmartBooks recommends books by analyzing the content of books that a user has added to favorites.
+                        The system compares book title, author, description and category to find similar books.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h3 class="fw-bold mb-3">TF-IDF Vectorization</h3>
+                    <p>
+                        TF-IDF transforms textual book information into numerical vectors. This helps the system understand
+                        which words are important in each book description.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mt-3">
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h3 class="fw-bold mb-3">Cosine Similarity</h3>
+                    <p>
+                        Cosine Similarity measures how close two book vectors are. A higher similarity score means that two
+                        books are more related and one may be recommended to the user.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h3 class="fw-bold mb-3">Recommendation Process</h3>
+                    <ol>
+                        <li>The user adds books to favorites.</li>
+                        <li>The system extracts book content features.</li>
+                        <li>TF-IDF converts text into vectors.</li>
+                        <li>Cosine Similarity compares books.</li>
+                        <li>The most similar books are recommended.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm border-0 mt-4">
+        <div class="card-body">
+            <h3 class="fw-bold mb-3">Algorithm Summary</h3>
+
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Recommendation Type</th>
+                        <td>Content-Based Filtering</td>
+                    </tr>
+                    <tr>
+                        <th>Vectorization Method</th>
+                        <td>TF-IDF</td>
+                    </tr>
+                    <tr>
+                        <th>Similarity Metric</th>
+                        <td>Cosine Similarity</td>
+                    </tr>
+                    <tr>
+                        <th>Dataset</th>
+                        <td>100 books from multiple categories</td>
+                    </tr>
+                    <tr>
+                        <th>Used Features</th>
+                        <td>Title, Author, Description, Category</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

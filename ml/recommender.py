@@ -1,4 +1,5 @@
 import pandas as pd
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -36,6 +37,8 @@ def get_content_based_recommendations(all_books, favorite_books, top_n=8):
     similarity_matrix = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
     favorite_ids = [book.id for book in favorite_books]
+    favorite_titles = [book.title for book in favorite_books]
+
     favorite_indexes = df[df["id"].isin(favorite_ids)].index.tolist()
 
     recommendation_scores = {}
@@ -55,10 +58,18 @@ def get_content_based_recommendations(all_books, favorite_books, top_n=8):
         reverse=True
     )
 
-    recommended_ids = [book_id for book_id, score in sorted_recommendations[:top_n]]
+    recommended_items = []
 
-    recommended_books = [
-        book for book in all_books if book.id in recommended_ids
-    ]
+    for book_id, score in sorted_recommendations[:top_n]:
+        book = next((book for book in all_books if book.id == book_id), None)
 
-    return recommended_books
+        if book:
+            match_score = round(min(score * 100, 100), 1)
+
+            recommended_items.append({
+                "book": book,
+                "score": match_score,
+                "reason": favorite_titles[:3]
+            })
+
+    return recommended_items

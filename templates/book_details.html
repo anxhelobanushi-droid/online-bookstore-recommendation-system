@@ -8,9 +8,20 @@
 
         <div class="col-md-4">
 
-            <div class="book-details-cover shadow">
-                <span>{{ book.title[0] }}</span>
-            </div>
+            {% if book.image %}
+                <img src="{{ url_for('static', filename='images/books/' ~ book.image) }}"
+                     class="book-details-img shadow"
+                     alt="{{ book.title }}"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                <div class="book-details-cover shadow d-none">
+                    <span>{{ book.title[0] }}</span>
+                </div>
+            {% else %}
+                <div class="book-details-cover shadow">
+                    <span>{{ book.title[0] }}</span>
+                </div>
+            {% endif %}
 
         </div>
 
@@ -136,6 +147,76 @@
             </div>
 
         </div>
+
+    </div>
+
+</section>
+
+<section class="container pb-5">
+
+    <h2 class="fw-bold mb-4">
+        Similar Books
+    </h2>
+
+    <div class="row g-4">
+
+        {% for similar_book in similar_books %}
+
+        <div class="col-md-4 col-lg-3 col-sm-6">
+
+            <div class="card book-card h-100 shadow-sm">
+
+                <a href="{{ url_for('book_details', book_id=similar_book.id) }}" class="text-decoration-none">
+
+                    {% if similar_book.image %}
+                        <img src="{{ url_for('static', filename='images/books/' ~ similar_book.image) }}"
+                             class="book-cover-img"
+                             alt="{{ similar_book.title }}"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                        <div class="book-cover-placeholder recommendation-cover d-none">
+                            <span>{{ similar_book.title[0] }}</span>
+                        </div>
+                    {% else %}
+                        <div class="book-cover-placeholder recommendation-cover">
+                            <span>{{ similar_book.title[0] }}</span>
+                        </div>
+                    {% endif %}
+
+                </a>
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        <a href="{{ url_for('book_details', book_id=similar_book.id) }}"
+                           class="text-dark text-decoration-none">
+                            {{ similar_book.title }}
+                        </a>
+                    </h5>
+
+                    <p class="text-muted mb-1">
+                        {{ similar_book.author }}
+                    </p>
+
+                    <p class="small text-primary mb-0">
+                        {{ similar_book.category.name }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+            <div class="alert alert-info">
+                No similar books found for this category.
+            </div>
+        </div>
+
+        {% endfor %}
 
     </div>
 

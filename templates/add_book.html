@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="books-header py-5">
+    <div class="container text-center">
+        <h1>Add New Book</h1>
+        <p>
+            Add a new book record to the SmartBooks library dataset.
+        </p>
+    </div>
+</section>
+
+<section class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <form method="POST" action="{{ url_for('add_book') }}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Book Title</label>
+                            <input type="text"
+                                   name="title"
+                                   class="form-control"
+                                   placeholder="Enter book title"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Author</label>
+                            <input type="text"
+                                   name="author"
+                                   class="form-control"
+                                   placeholder="Enter author name"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select name="category_id" class="form-select" required>
+                                <option value="">Select category</option>
+
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">
+                                        {{ category.name }}
+                                    </option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Published Year</label>
+                            <input type="number"
+                                   name="published_year"
+                                   class="form-control"
+                                   placeholder="Example: 2024"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Image Filename</label>
+                            <input type="text"
+                                   name="image"
+                                   class="form-control"
+                                   placeholder="example_book.jpg">
+                            <small class="text-muted">
+                                Optional. Later you can place the image inside static/images/books/.
+                            </small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea name="description"
+                                      class="form-control"
+                                      rows="5"
+                                      placeholder="Enter book description"
+                                      required></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <a href="{{ url_for('admin_books') }}"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                            <button type="submit" class="btn btn-success">
+                                Save Book
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

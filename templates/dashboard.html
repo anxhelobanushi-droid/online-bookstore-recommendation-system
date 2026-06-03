@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="books-header py-5">
+    <div class="container text-center">
+        <h1>SmartBooks Analytics Dashboard</h1>
+        <p>
+            System statistics, user activity and Machine Learning recommendation overview.
+        </p>
+    </div>
+</section>
+
+<section class="container py-5">
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4 col-lg-2">
+            <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h3>{{ total_books }}</h3>
+                    <p>Books</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+            <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h3>{{ total_categories }}</h3>
+                    <p>Categories</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+            <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h3>{{ total_users }}</h3>
+                    <p>Users</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3">
+            <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h3>{{ total_favorites }}</h3>
+                    <p>Favorites</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3">
+            <div class="card dashboard-card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h3>{{ total_ratings }}</h3>
+                    <p>Ratings</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h4 class="fw-bold mb-4">Books by Category</h4>
+                    <canvas id="categoryBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h4 class="fw-bold mb-4">Machine Learning Engine</h4>
+
+                    <ul class="list-group list-group-flush">
+
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Recommendation Type</span>
+                            <strong>Content-Based</strong>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Vectorization</span>
+                            <strong>TF-IDF</strong>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Similarity Metric</span>
+                            <strong>Cosine</strong>
+                        </li>
+
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Dataset</span>
+                            <strong>{{ total_books }} Books</strong>
+                        </li>
+
+                    </ul>
+
+                    <hr>
+
+                    <h6 class="fw-bold">Demo Evaluation Metrics</h6>
+
+                    <p class="mb-1">Precision: {{ precision_demo }}%</p>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" style="width: {{ precision_demo }}%"></div>
+                    </div>
+
+                    <p class="mb-1">Recall: {{ recall_demo }}%</p>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-info" style="width: {{ recall_demo }}%"></div>
+                    </div>
+
+                    <p class="mb-1">F1-Score: {{ f1_demo }}%</p>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" style="width: {{ f1_demo }}%"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mt-4">
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+
+                    <h4 class="fw-bold mb-4">Top Rated Books</h4>
+
+                    {% if top_rated_books %}
+
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Book</th>
+                                        <th>Category</th>
+                                        <th>Avg. Rating</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for item in top_rated_books %}
+                                    <tr>
+                                        <td>{{ item.book.title }}</td>
+                                        <td>{{ item.book.category.name }}</td>
+                                        <td>
+                                            <span class="text-warning fw-bold">
+                                                {{ item.average_rating }} ★
+                                            </span>
+                                            <small class="text-muted">
+                                                ({{ item.rating_count }})
+                                            </small>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    {% else %}
+
+                        <div class="alert alert-info mb-0">
+                            No ratings available yet.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+
+                    <h4 class="fw-bold mb-4">Most Favorited Books</h4>
+
+                    {% if most_favorited_books %}
+
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Book</th>
+                                        <th>Category</th>
+                                        <th>Favorites</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for item in most_favorited_books %}
+                                    <tr>
+                                        <td>{{ item.book.title }}</td>
+                                        <td>{{ item.book.category.name }}</td>
+                                        <td>
+                                            <span class="fw-bold text-primary">
+                                                {{ item.favorite_count }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    {% else %}
+
+                        <div class="alert alert-info mb-0">
+                            No favorite data available yet.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mt-4">
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+
+                    <h4 class="fw-bold mb-4">Most Active Users</h4>
+
+                    {% if active_users %}
+
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Favorites</th>
+                                        <th>Ratings</th>
+                                        <th>Total Activity</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for item in active_users %}
+                                    <tr>
+                                        <td>{{ item.user.username }}</td>
+                                        <td>{{ item.favorites }}</td>
+                                        <td>{{ item.ratings }}</td>
+                                        <td>
+                                            <span class="fw-bold text-success">
+                                                {{ item.activity_score }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    {% else %}
+
+                        <div class="alert alert-info mb-0">
+                            No user activity available yet.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+
+                    <h4 class="fw-bold mb-4">Category Distribution</h4>
+
+                    {% for item in category_stats %}
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ item.name }}</span>
+                            <strong>{{ item.count }}</strong>
+                        </div>
+
+                        <div class="progress mt-1">
+                            <div class="progress-bar"
+                                 style="width: {{ (item.count / total_books * 100) if total_books > 0 else 0 }}%">
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const categoryLabels = [
+        {% for item in category_stats %}
+            "{{ item.name }}",
+        {% endfor %}
+    ];
+
+    const categoryData = [
+        {% for item in category_stats %}
+            {{ item.count }},
+        {% endfor %}
+    ];
+
+    new Chart(document.getElementById("categoryBarChart"), {
+        type: "bar",
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                label: "Number of Books",
+                data: categoryData,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}
