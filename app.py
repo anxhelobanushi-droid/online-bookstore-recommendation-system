@@ -1,8 +1,11 @@
+import pandas as pd
+
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from config import Config
-from models import db, User, Category, Book, Favorite
+from models import db, User, Category, Book, Favorite, Rating
+from ml.recommender import get_content_based_recommendations
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -18,14 +21,22 @@ def home():
 @app.route("/books")
 def books():
     search = request.args.get("search", "")
+    category_id = request.args.get("category", "")
+
+    query = Book.query
 
     if search:
-        all_books = Book.query.filter(
+        query = query.filter(
             (Book.title.like(f"%{search}%")) |
             (Book.author.like(f"%{search}%"))
-        ).all()
-    else:
-        all_books = Book.query.all()
+        )
+
+    if category_id:
+        query = query.filter(Book.category_id == int(category_id))
+
+    all_books = query.all()
+    categories = Category.query.all()
+    total_books = Book.query.count()
 
     favorite_book_ids = []
 
@@ -36,9 +47,156 @@ def books():
     return render_template(
         "books.html",
         books=all_books,
+        categories=categories,
+        total_books=total_books,
         search=search,
+        selected_category=category_id,
         favorite_book_ids=favorite_book_ids
     )
+
+
+@app.route("/book/<int:book_id>")
+def book_details(book_id):
+    book = Book.query.get_or_404(book_id)
+
+    is_favorite = False
+    user_rating = None
+
+    ratings = Rating.query.filter_by(book_id=book.id).all()
+
+    if ratings:
+        average_rating = round(
+            sum(rating.rating for rating in ratings) / len(ratings),
+            1
+        )
+    else:
+        average_rating = None
+
+    if session.get("user_id"):
+        favorite = Favorite.query.filter_by(
+            user_id=session["user_id"],
+            book_id=book.id
+        ).first()
+
+        if favorite:
+            is_favorite = True
+
+        rating = Rating.query.filter_by(
+            user_id=session["user_id"],
+            book_id=book.id
+        ).first()
+
+        if rating:
+            user_rating = rating.rating
+
+    return render_template(
+        "book_details.html",
+        book=book,
+        is_favorite=is_favorite,
+        user_rating=user_rating,
+        average_rating=average_rating,
+        rating_count=len(ratings)
+    )
+
+
+@app.route("/profile")
+def profile():
+    if not session.get("user_id"):
+        flash("Please login to access your profile.", "warning")
+        return redirect(url_for("login"))
+
+    user = User.query.get_or_404(session["user_id"])
+
+    favorites = Favorite.query.filter_by(user_id=user.id).all()
+    favorite_book_ids = [favorite.book_id for favorite in favorites]
+    favorite_books = Book.query.filter(Book.id.in_(favorite_book_ids)).all()
+
+    ratings = Rating.query.filter_by(user_id=user.id).all()
+
+    rated_books = []
+
+    for rating in ratings:
+        book = Book.query.get(rating.book_id)
+
+        if book:
+            rated_books.append({
+                "book": book,
+                "rating": rating.rating
+            })
+
+    return render_template(
+        "profile.html",
+        user=user,
+        favorite_books=favorite_books,
+        rated_books=rated_books
+    )
+
+
+@app.route("/rate-book/<int:book_id>", methods=["POST"])
+def rate_book(book_id):
+    if not session.get("user_id"):
+        flash("Please login to rate books.", "warning")
+        return redirect(url_for("login"))
+
+    rating_value = int(request.form["rating"])
+
+    existing_rating = Rating.query.filter_by(
+        user_id=session["user_id"],
+        book_id=book_id
+    ).first()
+
+    if existing_rating:
+        existing_rating.rating = rating_value
+        flash("Your rating has been updated.", "success")
+    else:
+        new_rating = Rating(
+            user_id=session["user_id"],
+            book_id=book_id,
+            rating=rating_value
+        )
+
+        db.session.add(new_rating)
+        flash("Your rating has been submitted.", "success")
+
+    db.session.commit()
+
+    return redirect(url_for("book_details", book_id=book_id))
+
+
+@app.route("/import-books-csv")
+def import_books_csv():
+    Favorite.query.delete()
+    Rating.query.delete()
+    Book.query.delete()
+    Category.query.delete()
+    db.session.commit()
+
+    df = pd.read_csv("data/books.csv")
+
+    for category_name in df["category"].unique():
+        category = Category(name=category_name)
+        db.session.add(category)
+
+    db.session.commit()
+
+    for _, row in df.iterrows():
+        category = Category.query.filter_by(name=row["category"]).first()
+
+        book = Book(
+            title=row["title"],
+            author=row["author"],
+            category_id=category.id,
+            published_year=int(row["published_year"]),
+            image=row["image"],
+            description=row["description"]
+        )
+
+        db.session.add(book)
+
+    db.session.commit()
+
+    flash("Books imported successfully from CSV dataset.", "success")
+    return redirect(url_for("books"))
 
 
 @app.route("/add-favorite/<int:book_id>")
@@ -65,7 +223,7 @@ def add_favorite(book_id):
 
         flash("Book added to favorites.", "success")
 
-    return redirect(url_for("books"))
+    return redirect(request.referrer or url_for("books"))
 
 
 @app.route("/recommendations")
@@ -78,73 +236,19 @@ def recommendations():
     favorite_book_ids = [favorite.book_id for favorite in favorites]
 
     favorite_books = Book.query.filter(Book.id.in_(favorite_book_ids)).all()
+    all_books = Book.query.all()
 
-    favorite_category_ids = list(
-        set(book.category_id for book in favorite_books)
+    recommended_books = get_content_based_recommendations(
+        all_books=all_books,
+        favorite_books=favorite_books,
+        top_n=8
     )
-
-    recommended_books = []
-
-    if favorite_category_ids:
-        recommended_books = Book.query.filter(
-            Book.category_id.in_(favorite_category_ids),
-            ~Book.id.in_(favorite_book_ids)
-        ).all()
 
     return render_template(
         "recommendations.html",
         favorite_books=favorite_books,
         recommended_books=recommended_books
     )
-
-
-@app.route("/seed-data")
-def seed_data():
-    if Category.query.first():
-        flash("Data already exists.", "info")
-        return redirect(url_for("books"))
-
-    categories = [
-        "Technology", "Science", "Business", "Psychology", "Education",
-        "History", "Biography", "Fiction", "Fantasy", "Romance"
-    ]
-
-    for category_name in categories:
-        db.session.add(Category(name=category_name))
-
-    db.session.commit()
-
-    sample_books = [
-        ("Clean Code", "Robert C. Martin", "Technology", 2008, "clean_code.jpg"),
-        ("Python Crash Course", "Eric Matthes", "Technology", 2019, "python_crash_course.jpg"),
-        ("Artificial Intelligence", "Stuart Russell", "Technology", 2020, "artificial_intelligence.jpg"),
-        ("Atomic Habits", "James Clear", "Psychology", 2018, "atomic_habits.jpg"),
-        ("The Psychology of Money", "Morgan Housel", "Business", 2020, "psychology_of_money.jpg"),
-        ("Sapiens", "Yuval Noah Harari", "History", 2011, "sapiens.jpg"),
-        ("Educated", "Tara Westover", "Biography", 2018, "educated.jpg"),
-        ("The Hobbit", "J.R.R. Tolkien", "Fantasy", 1937, "the_hobbit.jpg"),
-        ("Pride and Prejudice", "Jane Austen", "Romance", 1813, "pride_and_prejudice.jpg"),
-        ("A Brief History of Time", "Stephen Hawking", "Science", 1988, "brief_history_of_time.jpg")
-    ]
-
-    for title, author, category_name, year, image in sample_books:
-        category = Category.query.filter_by(name=category_name).first()
-
-        book = Book(
-            title=title,
-            author=author,
-            description="A selected book from the SmartBooks online library.",
-            published_year=year,
-            image=image,
-            category_id=category.id
-        )
-
-        db.session.add(book)
-
-    db.session.commit()
-
-    flash("Initial books and categories added successfully.", "success")
-    return redirect(url_for("books"))
 
 
 @app.route("/register", methods=["GET", "POST"])

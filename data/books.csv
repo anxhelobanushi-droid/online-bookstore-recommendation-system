@@ -1,0 +1,101 @@
+title,author,category,published_year,image,description
+Clean Code,Robert C. Martin,Technology,2008,clean_code.jpg,A practical guide to writing readable maintainable and efficient software code.
+The Pragmatic Programmer,Andrew Hunt and David Thomas,Technology,1999,pragmatic_programmer.jpg,A classic software engineering book focused on practical programming habits.
+Python Crash Course,Eric Matthes,Technology,2019,python_crash_course.jpg,An introductory guide to Python programming with hands-on projects.
+Automate the Boring Stuff with Python,Al Sweigart,Technology,2015,automate_python.jpg,A beginner friendly book about using Python to automate everyday tasks.
+Artificial Intelligence A Modern Approach,Stuart Russell and Peter Norvig,Technology,2020,artificial_intelligence.jpg,A comprehensive textbook covering artificial intelligence concepts and algorithms.
+Hands-On Machine Learning,Aurélien Géron,Technology,2019,hands_on_ml.jpg,A practical guide to machine learning with Scikit-Learn Keras and TensorFlow.
+Introduction to Algorithms,Thomas H. Cormen,Technology,2009,introduction_algorithms.jpg,A detailed textbook about algorithms data structures and computational problem solving.
+Design Patterns,Erich Gamma,Technology,1994,design_patterns.jpg,A foundational book about reusable object-oriented software design patterns.
+Database System Concepts,Abraham Silberschatz,Technology,2019,database_system_concepts.jpg,A complete introduction to relational databases SQL and database design.
+Computer Networking A Top-Down Approach,James Kurose and Keith Ross,Technology,2021,computer_networking.jpg,A structured introduction to computer networks and internet protocols.
+Operating System Concepts,Abraham Silberschatz,Technology,2018,operating_system_concepts.jpg,A textbook covering processes memory file systems and operating system design.
+Deep Learning,Ian Goodfellow and Yoshua Bengio and Aaron Courville,Technology,2016,deep_learning.jpg,A theoretical and practical introduction to deep learning methods.
+Flask Web Development,Miguel Grinberg,Technology,2018,flask_web_development.jpg,A practical book about building web applications with Flask and Python.
+Learning SQL,Alan Beaulieu,Technology,2020,learning_sql.jpg,A beginner friendly introduction to SQL and relational database querying.
+Data Science from Scratch,Joel Grus,Technology,2019,data_science_scratch.jpg,A book explaining data science principles using Python.
+A Brief History of Time,Stephen Hawking,Science,1988,brief_history_of_time.jpg,An accessible introduction to cosmology black holes and the universe.
+The Selfish Gene,Richard Dawkins,Science,1976,selfish_gene.jpg,A science book explaining evolution from the perspective of genes.
+Cosmos,Carl Sagan,Science,1980,cosmos.jpg,A popular science book exploring astronomy life and the universe.
+The Gene,Siddhartha Mukherjee,Science,2016,the_gene.jpg,A historical and scientific exploration of genetics and heredity.
+The Immortal Life of Henrietta Lacks,Rebecca Skloot,Science,2010,henrietta_lacks.jpg,A story about medical research ethics cells and scientific discovery.
+The Elegant Universe,Brian Greene,Science,1999,elegant_universe.jpg,A book explaining string theory relativity and modern physics.
+Silent Spring,Rachel Carson,Science,1962,silent_spring.jpg,A landmark environmental science book about pesticides and nature.
+The Origin of Species,Charles Darwin,Science,1859,origin_species.jpg,A foundational work about evolution and natural selection.
+Astrophysics for People in a Hurry,Neil deGrasse Tyson,Science,2017,astrophysics_hurry.jpg,A short introduction to major ideas in astrophysics.
+The Body,Bill Bryson,Science,2019,the_body.jpg,A readable guide to the human body and how it works.
+The Lean Startup,Eric Ries,Business,2011,lean_startup.jpg,A business book about building startups through experimentation and validated learning.
+Good to Great,Jim Collins,Business,2001,good_to_great.jpg,A management book analyzing how companies move from good performance to greatness.
+The Intelligent Investor,Benjamin Graham,Business,1949,intelligent_investor.jpg,A classic investment book focused on value investing and long term thinking.
+Thinking Fast and Slow,Daniel Kahneman,Business,2011,thinking_fast_slow.jpg,A book about decision making cognitive biases and behavioral economics.
+Zero to One,Peter Thiel,Business,2014,zero_to_one.jpg,A startup book about innovation competition and building unique businesses.
+Rich Dad Poor Dad,Robert Kiyosaki,Business,1997,rich_dad_poor_dad.jpg,A personal finance book about money investing and financial education.
+The 7 Habits of Highly Effective People,Stephen Covey,Business,1989,seven_habits.jpg,A productivity and leadership book about personal effectiveness.
+Start with Why,Simon Sinek,Business,2009,start_with_why.jpg,A leadership book about purpose motivation and organizational success.
+Blue Ocean Strategy,W. Chan Kim and Renée Mauborgne,Business,2004,blue_ocean_strategy.jpg,A strategy book about creating uncontested market spaces.
+The Psychology of Money,Morgan Housel,Business,2020,psychology_of_money.jpg,A book about financial behavior wealth and long term money decisions.
+Atomic Habits,James Clear,Psychology,2018,atomic_habits.jpg,A practical book about building good habits and breaking bad ones.
+Mindset,Carol S. Dweck,Psychology,2006,mindset.jpg,A psychology book about fixed and growth mindsets.
+Emotional Intelligence,Daniel Goleman,Psychology,1995,emotional_intelligence.jpg,A book explaining the importance of emotional skills in life and work.
+Influence,Robert Cialdini,Psychology,1984,influence.jpg,A psychology book about persuasion and human behavior.
+Man's Search for Meaning,Viktor Frankl,Psychology,1946,mans_search_meaning.jpg,A reflective work about meaning resilience and human suffering.
+The Power of Habit,Charles Duhigg,Psychology,2012,power_of_habit.jpg,A book explaining how habits form and how they can be changed.
+Grit,Angela Duckworth,Psychology,2016,grit.jpg,A psychology book about passion perseverance and success.
+Drive,Daniel H. Pink,Psychology,2009,drive.jpg,A book about motivation autonomy mastery and purpose.
+Flow,Mihaly Csikszentmihalyi,Psychology,1990,flow.jpg,A book about optimal experience focus and happiness.
+Quiet,Susan Cain,Psychology,2012,quiet.jpg,A book about introversion personality and modern society.
+How Learning Works,Susan Ambrose,Education,2010,how_learning_works.jpg,A research based guide about principles of effective learning.
+Make It Stick,Peter Brown,Education,2014,make_it_stick.jpg,A book about learning strategies memory and effective studying.
+The First Days of School,Harry Wong,Education,1991,first_days_school.jpg,A practical guide to classroom management and teaching.
+Visible Learning,John Hattie,Education,2008,visible_learning.jpg,A research synthesis about factors influencing student achievement.
+Teaching at Its Best,Linda Nilson,Education,2010,teaching_at_its_best.jpg,A guide for effective teaching course design and assessment.
+The Art of Teaching,Jay Parini,Education,2005,art_of_teaching.jpg,A reflective book about teaching communication and education.
+Mindstorms,Seymour Papert,Education,1980,mindstorms.jpg,A book about children computers and constructionist learning.
+Pedagogy of the Oppressed,Paulo Freire,Education,1968,pedagogy_oppressed.jpg,A critical education book about dialogue power and liberation.
+Digital Minimalism,Cal Newport,Education,2019,digital_minimalism.jpg,A book about focused technology use and digital wellbeing.
+Ultralearning,Scott Young,Education,2019,ultralearning.jpg,A book about self-directed intensive learning strategies.
+Sapiens,Yuval Noah Harari,History,2011,sapiens.jpg,A historical overview of human development from early humans to modern society.
+Guns Germs and Steel,Jared Diamond,History,1997,guns_germs_steel.jpg,A history book explaining societal development through geography and environment.
+The Silk Roads,Peter Frankopan,History,2015,silk_roads.jpg,A global history focused on trade routes and cultural exchange.
+A People's History of the United States,Howard Zinn,History,1980,peoples_history.jpg,A history book presenting events from the perspective of ordinary people.
+The Diary of a Young Girl,Anne Frank,History,1947,diary_young_girl.jpg,A personal historical account from World War II.
+The Rise and Fall of the Third Reich,William Shirer,History,1960,rise_fall_third_reich.jpg,A detailed historical study of Nazi Germany.
+SPQR,Mary Beard,History,2015,spqr.jpg,A modern history of ancient Rome and its institutions.
+The Wright Brothers,David McCullough,History,2015,wright_brothers.jpg,A historical biography about the pioneers of aviation.
+Postwar,Tony Judt,History,2005,postwar.jpg,A history of Europe after World War II.
+The Crusades,Thomas Asbridge,History,2010,crusades.jpg,A historical account of the medieval crusading movement.
+Steve Jobs,Walter Isaacson,Biography,2011,steve_jobs.jpg,A biography of Apple co-founder Steve Jobs and his influence on technology.
+Elon Musk,Walter Isaacson,Biography,2023,elon_musk.jpg,A biography exploring the life companies and ambitions of Elon Musk.
+Becoming,Michelle Obama,Biography,2018,becoming.jpg,A memoir about identity family public life and personal growth.
+Educated,Tara Westover,Biography,2018,educated.jpg,A memoir about education family and transformation.
+Long Walk to Freedom,Nelson Mandela,Biography,1994,long_walk_freedom.jpg,An autobiography about Mandela's life activism and leadership.
+The Story of My Life,Helen Keller,Biography,1903,story_of_my_life.jpg,An autobiography about overcoming disability and pursuing education.
+Einstein His Life and Universe,Walter Isaacson,Biography,2007,einstein.jpg,A biography of Albert Einstein and his scientific contributions.
+Alexander Hamilton,Ron Chernow,Biography,2004,alexander_hamilton.jpg,A biography of American founding figure Alexander Hamilton.
+I Am Malala,Malala Yousafzai,Biography,2013,i_am_malala.jpg,A memoir about education courage and activism.
+Shoe Dog,Phil Knight,Biography,2016,shoe_dog.jpg,A memoir by the founder of Nike about entrepreneurship and business.
+To Kill a Mockingbird,Harper Lee,Fiction,1960,to_kill_mockingbird.jpg,A novel about justice morality and childhood in the American South.
+1984,George Orwell,Fiction,1949,1984.jpg,A dystopian novel about surveillance control and totalitarianism.
+The Great Gatsby,F. Scott Fitzgerald,Fiction,1925,great_gatsby.jpg,A novel about wealth ambition and the American Dream.
+The Catcher in the Rye,J.D. Salinger,Fiction,1951,catcher_rye.jpg,A coming of age novel about alienation and identity.
+The Alchemist,Paulo Coelho,Fiction,1988,the_alchemist.jpg,A philosophical novel about dreams destiny and self discovery.
+The Kite Runner,Khaled Hosseini,Fiction,2003,kite_runner.jpg,A novel about friendship betrayal and redemption.
+Life of Pi,Yann Martel,Fiction,2001,life_of_pi.jpg,A novel about survival faith and storytelling.
+The Book Thief,Markus Zusak,Fiction,2005,book_thief.jpg,A historical fiction novel set during World War II.
+Brave New World,Aldous Huxley,Fiction,1932,brave_new_world.jpg,A dystopian novel about technology society and control.
+Fahrenheit 451,Ray Bradbury,Fiction,1953,fahrenheit_451.jpg,A novel about censorship books and independent thought.
+The Hobbit,J.R.R. Tolkien,Fantasy,1937,the_hobbit.jpg,A fantasy adventure about Bilbo Baggins and a journey to a mountain.
+The Fellowship of the Ring,J.R.R. Tolkien,Fantasy,1954,fellowship_ring.jpg,The first part of an epic fantasy journey through Middle-earth.
+Harry Potter and the Sorcerer's Stone,J.K. Rowling,Fantasy,1997,harry_potter_1.jpg,A fantasy novel about a young wizard discovering his magical world.
+A Game of Thrones,George R.R. Martin,Fantasy,1996,game_of_thrones.jpg,A fantasy novel involving politics power and rival kingdoms.
+The Name of the Wind,Patrick Rothfuss,Fantasy,2007,name_of_the_wind.jpg,A fantasy novel about a gifted musician and magician.
+Mistborn,Brandon Sanderson,Fantasy,2006,mistborn.jpg,A fantasy story about rebellion magic and empire.
+The Way of Kings,Brandon Sanderson,Fantasy,2010,way_of_kings.jpg,An epic fantasy novel about war honor and power.
+The Chronicles of Narnia,C.S. Lewis,Fantasy,1950,chronicles_narnia.jpg,A fantasy series about children entering a magical world.
+American Gods,Neil Gaiman,Fantasy,2001,american_gods.jpg,A modern fantasy novel about mythology and belief.
+Eragon,Christopher Paolini,Fantasy,2002,eragon.jpg,A fantasy adventure about dragons magic and destiny.
+Pride and Prejudice,Jane Austen,Romance,1813,pride_and_prejudice.jpg,A classic romance novel about manners love and social expectations.
+Jane Eyre,Charlotte Brontë,Romance,1847,jane_eyre.jpg,A novel about love independence and personal strength.
+Me Before You,Jojo Moyes,Romance,2012,me_before_you.jpg,A contemporary romance about love life choices and compassion.
+The Notebook,Nicholas Sparks,Romance,1996,the_notebook.jpg,A romantic story about enduring love and memory.
+Outlander,Diana Gabaldon,Romance,1991,outlander.jpg,A historical romance involving time travel adventure and love.

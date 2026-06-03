@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="books-header py-5">
+    <div class="container text-center">
+        <h1>My Library</h1>
+        <p>
+            Manage your favorite books and view your personal ratings.
+        </p>
+    </div>
+</section>
+
+<section class="container py-5">
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 profile-stat-card">
+                <div class="card-body text-center">
+                    <h3>{{ favorite_books|length }}</h3>
+                    <p class="mb-0 text-muted">Favorite Books</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 profile-stat-card">
+                <div class="card-body text-center">
+                    <h3>{{ rated_books|length }}</h3>
+                    <p class="mb-0 text-muted">Rated Books</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 profile-stat-card">
+                <div class="card-body text-center">
+                    <h3>{{ user.role|capitalize }}</h3>
+                    <p class="mb-0 text-muted">Account Role</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="mb-0">Favorite Books</h2>
+
+        <a href="{{ url_for('recommendations') }}" class="btn btn-primary">
+            View Recommendations
+        </a>
+
+    </div>
+
+    <div class="row g-4 mb-5">
+
+        {% for book in favorite_books %}
+
+        <div class="col-md-4 col-lg-3 col-sm-6">
+
+            <div class="card book-card h-100 shadow-sm">
+
+                <a href="{{ url_for('book_details', book_id=book.id) }}" class="text-decoration-none">
+                    <div class="book-cover-placeholder">
+                        <span>{{ book.title[0] }}</span>
+                    </div>
+                </a>
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        <a href="{{ url_for('book_details', book_id=book.id) }}"
+                           class="text-dark text-decoration-none">
+                            {{ book.title }}
+                        </a>
+                    </h5>
+
+                    <p class="text-muted mb-1">{{ book.author }}</p>
+
+                    <p class="small text-primary">
+                        {{ book.category.name }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+            <div class="alert alert-info">
+                You have not added any favorite books yet.
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <h2 class="mb-4">My Ratings</h2>
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            {% if rated_books %}
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Book</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>My Rating</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for item in rated_books %}
+
+                            <tr>
+                                <td>{{ item.book.title }}</td>
+                                <td>{{ item.book.author }}</td>
+                                <td>{{ item.book.category.name }}</td>
+                                <td>
+                                    <span class="text-warning fw-bold">
+                                        {{ item.rating }} ★
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('book_details', book_id=item.book.id) }}"
+                                       class="btn btn-outline-primary btn-sm">
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="alert alert-info mb-0">
+                    You have not rated any books yet.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

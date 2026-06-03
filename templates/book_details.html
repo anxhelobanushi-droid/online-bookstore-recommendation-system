@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="container py-5">
+
+    <div class="row g-5 align-items-center">
+
+        <div class="col-md-4">
+
+            <div class="book-details-cover shadow">
+                <span>{{ book.title[0] }}</span>
+            </div>
+
+        </div>
+
+        <div class="col-md-8">
+
+            <span class="badge bg-primary mb-3">
+                {{ book.category.name }}
+            </span>
+
+            <h1 class="fw-bold">
+                {{ book.title }}
+            </h1>
+
+            <h5 class="text-muted mb-3">
+                by {{ book.author }}
+            </h5>
+
+            <p class="text-muted">
+                Published Year: {{ book.published_year }}
+            </p>
+
+            {% if average_rating %}
+                <p class="mb-2">
+                    <strong>Average Rating:</strong>
+                    {{ average_rating }} / 5
+                    <span class="text-warning">★</span>
+                    <span class="text-muted">({{ rating_count }} ratings)</span>
+                </p>
+            {% else %}
+                <p class="text-muted">
+                    No ratings yet.
+                </p>
+            {% endif %}
+
+            <p class="lead mt-3">
+                {{ book.description }}
+            </p>
+
+            {% if session.get("user_id") %}
+
+                <div class="card border-0 shadow-sm my-4">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold mb-3">
+                            Rate this book
+                        </h5>
+
+                        {% if user_rating %}
+                            <p class="text-success">
+                                Your current rating: {{ user_rating }} / 5 ★
+                            </p>
+                        {% endif %}
+
+                        <form method="POST" action="{{ url_for('rate_book', book_id=book.id) }}">
+
+                            <div class="row g-2 align-items-center">
+
+                                <div class="col-md-8">
+
+                                    <select name="rating" class="form-select" required>
+                                        <option value="">Choose rating</option>
+                                        <option value="1">1 - Poor</option>
+                                        <option value="2">2 - Fair</option>
+                                        <option value="3">3 - Good</option>
+                                        <option value="4">4 - Very Good</option>
+                                        <option value="5">5 - Excellent</option>
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        Submit Rating
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+            <div class="mt-4">
+
+                {% if session.get("user_id") %}
+
+                    {% if is_favorite %}
+
+                        <button class="btn btn-success btn-lg" disabled>
+                            Added to Favorites
+                        </button>
+
+                    {% else %}
+
+                        <a href="{{ url_for('add_favorite', book_id=book.id) }}"
+                           class="btn btn-warning btn-lg">
+                            Add to Favorites
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <a href="{{ url_for('login') }}"
+                       class="btn btn-primary btn-lg">
+                        Login to Save This Book
+                    </a>
+
+                {% endif %}
+
+                <a href="{{ url_for('books') }}"
+                   class="btn btn-outline-secondary btn-lg ms-2">
+                    Back to Books
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -79,3 +79,24 @@ footer {
 .recommendation-cover {
     background: linear-gradient(135deg, #ffb703, #1e5eff);
 }
+
+.book-details-cover {
+    height: 520px;
+    background: linear-gradient(135deg, #0d1b2a, #1e5eff);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8rem;
+    font-weight: 800;
+    border-radius: 18px;
+}
+
+.profile-stat-card {
+    border-radius: 16px;
+}
+
+.profile-stat-card h3 {
+    color: #1e5eff;
+    font-weight: 800;
+}

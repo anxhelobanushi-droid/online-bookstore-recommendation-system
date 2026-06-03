@@ -5,11 +5,26 @@
 <section class="books-header py-5">
     <div class="container text-center">
         <h1>My Recommendations</h1>
-        <p>Personalized book suggestions based on your favorite books.</p>
+        <p>
+            Personalized book suggestions generated using Machine Learning.
+        </p>
     </div>
 </section>
 
 <section class="container py-5">
+
+    <div class="alert alert-primary shadow-sm mb-5">
+        <h5 class="fw-bold mb-2">Recommendation Algorithm</h5>
+        <p class="mb-1">
+            SmartBooks uses a Content-Based Filtering approach based on
+            <strong>TF-IDF Vectorization</strong> and
+            <strong>Cosine Similarity</strong>.
+        </p>
+        <p class="mb-0">
+            The system analyzes your favorite books and recommends similar books
+            based on title, author, description and category.
+        </p>
+    </div>
 
     <h2 class="mb-4">Your Favorite Books</h2>
 
@@ -18,7 +33,6 @@
         {% for book in favorite_books %}
 
         <div class="col-md-4 col-lg-3 col-sm-6">
-
             <div class="card book-card h-100 shadow-sm">
 
                 <div class="book-cover-placeholder">
@@ -26,10 +40,7 @@
                 </div>
 
                 <div class="card-body">
-
-                    <h5 class="card-title">
-                        {{ book.title }}
-                    </h5>
+                    <h5 class="card-title">{{ book.title }}</h5>
 
                     <p class="card-text text-muted">
                         {{ book.author }}
@@ -38,11 +49,9 @@
                     <p class="small text-primary">
                         {{ book.category.name }}
                     </p>
-
                 </div>
 
             </div>
-
         </div>
 
         {% else %}
@@ -64,7 +73,6 @@
         {% for book in recommended_books %}
 
         <div class="col-md-4 col-lg-3 col-sm-6">
-
             <div class="card book-card h-100 shadow-sm">
 
                 <div class="book-cover-placeholder recommendation-cover">
@@ -72,10 +80,7 @@
                 </div>
 
                 <div class="card-body">
-
-                    <h5 class="card-title">
-                        {{ book.title }}
-                    </h5>
+                    <h5 class="card-title">{{ book.title }}</h5>
 
                     <p class="card-text text-muted">
                         {{ book.author }}
@@ -86,20 +91,18 @@
                     </p>
 
                     <p class="small">
-                        Recommended because it belongs to a category you liked.
+                        Recommended because its content is similar to your favorite books.
                     </p>
-
                 </div>
 
             </div>
-
         </div>
 
         {% else %}
 
         <div class="col-12">
             <div class="alert alert-warning">
-                No recommendations available yet. Add more favorite books to improve your recommendations.
+                No recommendations available yet. Add more favorite books or add more books to the database.
             </div>
         </div>
 
