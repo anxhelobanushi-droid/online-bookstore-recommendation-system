@@ -76,30 +76,38 @@
         <div class="col-lg-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
+                    <h4 class="fw-bold mb-4">Category Share</h4>
+                    <canvas id="categoryPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mt-4">
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
                     <h4 class="fw-bold mb-4">Machine Learning Engine</h4>
 
                     <ul class="list-group list-group-flush">
-
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>Recommendation Type</span>
+                            <span>Type</span>
                             <strong>Content-Based</strong>
                         </li>
-
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Vectorization</span>
                             <strong>TF-IDF</strong>
                         </li>
-
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>Similarity Metric</span>
+                            <span>Similarity</span>
                             <strong>Cosine</strong>
                         </li>
-
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Dataset</span>
                             <strong>{{ total_books }} Books</strong>
                         </li>
-
                     </ul>
 
                     <hr>
@@ -125,6 +133,15 @@
             </div>
         </div>
 
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h4 class="fw-bold mb-4">Ratings Distribution</h4>
+                    <canvas id="ratingChart"></canvas>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="row g-4 mt-4">
@@ -136,7 +153,6 @@
                     <h4 class="fw-bold mb-4">Top Rated Books</h4>
 
                     {% if top_rated_books %}
-
                         <div class="table-responsive">
                             <table class="table align-middle">
                                 <thead>
@@ -146,7 +162,6 @@
                                         <th>Avg. Rating</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {% for item in top_rated_books %}
                                     <tr>
@@ -156,22 +171,15 @@
                                             <span class="text-warning fw-bold">
                                                 {{ item.average_rating }} ★
                                             </span>
-                                            <small class="text-muted">
-                                                ({{ item.rating_count }})
-                                            </small>
+                                            <small class="text-muted">({{ item.rating_count }})</small>
                                         </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
-
                     {% else %}
-
-                        <div class="alert alert-info mb-0">
-                            No ratings available yet.
-                        </div>
-
+                        <div class="alert alert-info mb-0">No ratings available yet.</div>
                     {% endif %}
 
                 </div>
@@ -185,7 +193,6 @@
                     <h4 class="fw-bold mb-4">Most Favorited Books</h4>
 
                     {% if most_favorited_books %}
-
                         <div class="table-responsive">
                             <table class="table align-middle">
                                 <thead>
@@ -195,7 +202,6 @@
                                         <th>Favorites</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {% for item in most_favorited_books %}
                                     <tr>
@@ -211,13 +217,8 @@
                                 </tbody>
                             </table>
                         </div>
-
                     {% else %}
-
-                        <div class="alert alert-info mb-0">
-                            No favorite data available yet.
-                        </div>
-
+                        <div class="alert alert-info mb-0">No favorite data available yet.</div>
                     {% endif %}
 
                 </div>
@@ -235,7 +236,6 @@
                     <h4 class="fw-bold mb-4">Most Active Users</h4>
 
                     {% if active_users %}
-
                         <div class="table-responsive">
                             <table class="table align-middle">
                                 <thead>
@@ -243,10 +243,9 @@
                                         <th>User</th>
                                         <th>Favorites</th>
                                         <th>Ratings</th>
-                                        <th>Total Activity</th>
+                                        <th>Total</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {% for item in active_users %}
                                     <tr>
@@ -263,13 +262,8 @@
                                 </tbody>
                             </table>
                         </div>
-
                     {% else %}
-
-                        <div class="alert alert-info mb-0">
-                            No user activity available yet.
-                        </div>
-
+                        <div class="alert alert-info mb-0">No user activity available yet.</div>
                     {% endif %}
 
                 </div>
@@ -283,7 +277,6 @@
                     <h4 class="fw-bold mb-4">Category Distribution</h4>
 
                     {% for item in category_stats %}
-
                     <div class="mb-3">
                         <div class="d-flex justify-content-between">
                             <span>{{ item.name }}</span>
@@ -296,7 +289,6 @@
                             </div>
                         </div>
                     </div>
-
                     {% endfor %}
 
                 </div>
@@ -322,6 +314,18 @@
         {% endfor %}
     ];
 
+    const ratingLabels = [
+        {% for item in rating_distribution %}
+            "{{ item.rating }} Star",
+        {% endfor %}
+    ];
+
+    const ratingData = [
+        {% for item in rating_distribution %}
+            {{ item.count }},
+        {% endfor %}
+    ];
+
     new Chart(document.getElementById("categoryBarChart"), {
         type: "bar",
         data: {
@@ -336,6 +340,41 @@
             responsive: true,
             scales: {
                 y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("categoryPieChart"), {
+        type: "pie",
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                label: "Books",
+                data: categoryData
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+
+    new Chart(document.getElementById("ratingChart"), {
+        type: "bar",
+        data: {
+            labels: ratingLabels,
+            datasets: [{
+                label: "Number of Ratings",
+                data: ratingData,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            indexAxis: "y",
+            scales: {
+                x: {
                     beginAtZero: true
                 }
             }

@@ -54,69 +54,52 @@ def dashboard():
 
     category_stats = []
     for category in categories:
-        category_stats.append({
-            "name": category.name,
-            "count": Book.query.filter_by(category_id=category.id).count()
-        })
+        count = Book.query.filter_by(category_id=category.id).count()
+        category_stats.append({"name": category.name, "count": count})
 
     top_rated_books = []
     for book in books:
         ratings = Rating.query.filter_by(book_id=book.id).all()
-
         if ratings:
-            average_rating = round(
-                sum(rating.rating for rating in ratings) / len(ratings),
-                1
-            )
-
+            avg = round(sum(r.rating for r in ratings) / len(ratings), 1)
             top_rated_books.append({
                 "book": book,
-                "average_rating": average_rating,
+                "average_rating": avg,
                 "rating_count": len(ratings)
             })
 
-    top_rated_books = sorted(
-        top_rated_books,
-        key=lambda x: x["average_rating"],
-        reverse=True
-    )[:5]
+    top_rated_books = sorted(top_rated_books, key=lambda x: x["average_rating"], reverse=True)[:5]
 
     most_favorited_books = []
     for book in books:
-        favorite_count = Favorite.query.filter_by(book_id=book.id).count()
+        count = Favorite.query.filter_by(book_id=book.id).count()
+        if count > 0:
+            most_favorited_books.append({"book": book, "favorite_count": count})
 
-        if favorite_count > 0:
-            most_favorited_books.append({
-                "book": book,
-                "favorite_count": favorite_count
-            })
-
-    most_favorited_books = sorted(
-        most_favorited_books,
-        key=lambda x: x["favorite_count"],
-        reverse=True
-    )[:5]
+    most_favorited_books = sorted(most_favorited_books, key=lambda x: x["favorite_count"], reverse=True)[:5]
 
     active_users = []
     for user in users:
-        user_favorites = Favorite.query.filter_by(user_id=user.id).count()
-        user_ratings = Rating.query.filter_by(user_id=user.id).count()
+        favorites_count = Favorite.query.filter_by(user_id=user.id).count()
+        ratings_count = Rating.query.filter_by(user_id=user.id).count()
+        total_activity = favorites_count + ratings_count
 
-        activity_score = user_favorites + user_ratings
-
-        if activity_score > 0:
+        if total_activity > 0:
             active_users.append({
                 "user": user,
-                "favorites": user_favorites,
-                "ratings": user_ratings,
-                "activity_score": activity_score
+                "favorites": favorites_count,
+                "ratings": ratings_count,
+                "activity_score": total_activity
             })
 
-    active_users = sorted(
-        active_users,
-        key=lambda x: x["activity_score"],
-        reverse=True
-    )[:5]
+    active_users = sorted(active_users, key=lambda x: x["activity_score"], reverse=True)[:5]
+
+    rating_distribution = []
+    for value in range(1, 6):
+        rating_distribution.append({
+            "rating": value,
+            "count": Rating.query.filter_by(rating=value).count()
+        })
 
     precision_demo = 84
     recall_demo = 78
@@ -133,6 +116,7 @@ def dashboard():
         top_rated_books=top_rated_books,
         most_favorited_books=most_favorited_books,
         active_users=active_users,
+        rating_distribution=rating_distribution,
         precision_demo=precision_demo,
         recall_demo=recall_demo,
         f1_demo=f1_demo
@@ -144,13 +128,33 @@ def admin_books():
     if not admin_required():
         return redirect(url_for("login"))
 
-    books = Book.query.all()
+    search = request.args.get("search", "")
+    category_id = request.args.get("category", "")
+
+    query = Book.query
+
+    if search:
+        query = query.filter(
+            (Book.title.like(f"%{search}%")) |
+            (Book.author.like(f"%{search}%"))
+        )
+
+    if category_id:
+        query = query.filter(Book.category_id == int(category_id))
+
+    books = query.all()
+    categories = Category.query.all()
     total_categories = Category.query.count()
+    total_books = Book.query.count()
 
     return render_template(
         "admin_books.html",
         books=books,
-        total_categories=total_categories
+        categories=categories,
+        total_categories=total_categories,
+        total_books=total_books,
+        search=search,
+        selected_category=category_id
     )
 
 
@@ -230,11 +234,26 @@ def admin_categories():
     if not admin_required():
         return redirect(url_for("login"))
 
-    categories = Category.query.all()
+    search = request.args.get("search", "")
+
+    query = Category.query
+
+    if search:
+        query = query.filter(
+            Category.name.like(f"%{search}%")
+        )
+
+    categories = query.all()
+
+    total_categories = Category.query.count()
+    total_books = Book.query.count()
 
     return render_template(
         "admin_categories.html",
-        categories=categories
+        categories=categories,
+        total_categories=total_categories,
+        total_books=total_books,
+        search=search
     )
 
 
@@ -520,6 +539,46 @@ def add_favorite(book_id):
 
     return redirect(request.referrer or url_for("books"))
 
+@app.route("/remove-favorite/<int:book_id>")
+def remove_favorite(book_id):
+    if not session.get("user_id"):
+        flash("Please login to manage favorites.", "warning")
+        return redirect(url_for("login"))
+
+    favorite = Favorite.query.filter_by(
+        user_id=session["user_id"],
+        book_id=book_id
+    ).first()
+
+    if favorite:
+        db.session.delete(favorite)
+        db.session.commit()
+        flash("Book removed from favorites.", "success")
+    else:
+        flash("This book is not in your favorites.", "info")
+
+    return redirect(request.referrer or url_for("books"))
+
+
+@app.route("/remove-rating/<int:book_id>", methods=["POST"])
+def remove_rating(book_id):
+    if not session.get("user_id"):
+        flash("Please login to manage ratings.", "warning")
+        return redirect(url_for("login"))
+
+    rating = Rating.query.filter_by(
+        user_id=session["user_id"],
+        book_id=book_id
+    ).first()
+
+    if rating:
+        db.session.delete(rating)
+        db.session.commit()
+        flash("Your rating has been removed.", "success")
+    else:
+        flash("No rating found for this book.", "info")
+
+    return redirect(url_for("book_details", book_id=book_id))
 
 @app.route("/recommendations")
 def recommendations():
@@ -531,13 +590,56 @@ def recommendations():
     favorite_book_ids = [favorite.book_id for favorite in favorites]
 
     favorite_books = Book.query.filter(Book.id.in_(favorite_book_ids)).all()
+
+    highly_rated_records = Rating.query.filter(
+        Rating.user_id == session["user_id"],
+        Rating.rating >= 4
+    ).all()
+
+    highly_rated_book_ids = [
+        rating.book_id for rating in highly_rated_records
+    ]
+
+    highly_rated_books = Book.query.filter(
+        Book.id.in_(highly_rated_book_ids)
+    ).all()
+
     all_books = Book.query.all()
 
     recommended_items = get_content_based_recommendations(
         all_books=all_books,
         favorite_books=favorite_books,
+        highly_rated_books=highly_rated_books,
         top_n=8
     )
+
+    for item in recommended_items:
+        if item["score"] >= 75:
+            item["confidence"] = "High Match"
+            item["badge_class"] = "bg-success"
+        elif item["score"] >= 50:
+            item["confidence"] = "Medium Match"
+            item["badge_class"] = "bg-warning text-dark"
+        else:
+            item["confidence"] = "Low Match"
+            item["badge_class"] = "bg-secondary"
+
+    return render_template(
+        "recommendations.html",
+        favorite_books=favorite_books,
+        recommended_items=recommended_items
+    )
+
+    for item in recommended_items:
+        if item["score"] >= 75:
+            item["confidence"] = "High Match"
+            item["badge_class"] = "bg-success"
+        elif item["score"] >= 50:
+            item["confidence"] = "Medium Match"
+            item["badge_class"] = "bg-warning text-dark"
+        else:
+            item["confidence"] = "Low Match"
+            item["badge_class"] = "bg-secondary"
 
     return render_template(
         "recommendations.html",

@@ -11,14 +11,14 @@
     </div>
 </section>
 
-<section class="container py-5">
+<section class="container-fluid px-4 py-5">
 
     <div class="row mb-4">
 
         <div class="col-md-3">
             <div class="card dashboard-card shadow-sm border-0">
                 <div class="card-body text-center">
-                    <h3>{{ books|length }}</h3>
+                    <h3>{{ total_books }}</h3>
                     <p>Total Books</p>
                 </div>
             </div>
@@ -53,25 +53,68 @@
 
         <div class="card-header bg-white">
 
-            <div class="row">
+            <form method="GET" action="{{ url_for('admin_books') }}">
 
-                <div class="col-md-6">
-                    <h4 class="mb-0">Books Database</h4>
+                <div class="row g-2 align-items-center">
+
+                    <div class="col-lg-4">
+                        <h4 class="mb-0">Books Database</h4>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <input type="text"
+                               name="search"
+                               class="form-control"
+                               placeholder="Search by title or author..."
+                               value="{{ search }}">
+                    </div>
+
+                    <div class="col-lg-3">
+                        <select name="category" class="form-select">
+
+                            <option value="">All Categories</option>
+
+                            {% for category in categories %}
+
+                                <option value="{{ category.id }}"
+                                    {% if selected_category|string == category.id|string %}
+                                        selected
+                                    {% endif %}>
+                                    {{ category.name }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+                    <div class="col-lg-1">
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            Filter
+                        </button>
+                    </div>
+
                 </div>
 
-                <div class="col-md-6">
-
-                    <input type="text"
-                           class="form-control"
-                           placeholder="Search books...">
-
-                </div>
-
-            </div>
+            </form>
 
         </div>
 
         <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <p class="mb-0 text-muted">
+                    Showing {{ books|length }} result(s)
+                </p>
+
+                <a href="{{ url_for('admin_books') }}"
+                   class="btn btn-outline-secondary btn-sm">
+                    Clear Filters
+                </a>
+
+            </div>
 
             <div class="table-responsive">
 
@@ -109,17 +152,17 @@
                                         {% if book.image %}
                                             <img src="{{ url_for('static', filename='images/books/' ~ book.image) }}"
                                                  class="book-cover-img"
-                                                 style="width:60px;height:80px;"
+                                                 style="width:55px;height:75px;"
                                                  alt="{{ book.title }}"
                                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
 
                                             <div class="book-cover-placeholder d-none"
-                                                 style="width:60px;height:80px;font-size:1.5rem;">
+                                                 style="width:55px;height:75px;font-size:1.3rem;">
                                                 {{ book.title[0] }}
                                             </div>
                                         {% else %}
                                             <div class="book-cover-placeholder"
-                                                 style="width:60px;height:80px;font-size:1.5rem;">
+                                                 style="width:55px;height:75px;font-size:1.3rem;">
                                                 {{ book.title[0] }}
                                             </div>
                                         {% endif %}
@@ -135,7 +178,7 @@
                                         <br>
 
                                         <small class="text-muted">
-                                            {{ book.description[:60] }}...
+                                            {{ book.description[:70] }}...
                                         </small>
 
                                     </div>
@@ -149,11 +192,9 @@
                             </td>
 
                             <td>
-
                                 <span class="badge bg-primary">
                                     {{ book.category.name }}
                                 </span>
-
                             </td>
 
                             <td>
@@ -191,7 +232,7 @@
                         {% else %}
 
                         <tr>
-                            <td colspan="6" class="text-center text-muted">
+                            <td colspan="6" class="text-center text-muted py-4">
                                 No books found.
                             </td>
                         </tr>

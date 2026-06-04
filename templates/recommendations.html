@@ -16,23 +16,22 @@
     <div class="alert alert-primary shadow-sm mb-5">
         <h5 class="fw-bold mb-2">Recommendation Algorithm</h5>
         <p class="mb-1">
-            SmartBooks uses a Content-Based Filtering approach based on
+            SmartBooks uses <strong>Content-Based Filtering</strong> with
             <strong>TF-IDF Vectorization</strong> and
             <strong>Cosine Similarity</strong>.
         </p>
         <p class="mb-0">
-            The system analyzes your favorite books and recommends similar books
-            based on title, author, description and category.
+            The recommendation score shows how similar each suggested book is to your favorite books.
         </p>
     </div>
 
     <h2 class="mb-4">Your Favorite Books</h2>
 
-    <div class="row g-4 mb-5">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 mb-5">
 
         {% for book in favorite_books %}
 
-        <div class="col-md-4 col-lg-3 col-sm-6">
+        <div class="col">
             <div class="card book-card h-100 shadow-sm">
 
                 <a href="{{ url_for('book_details', book_id=book.id) }}" class="text-decoration-none">
@@ -62,11 +61,11 @@
                         </a>
                     </h5>
 
-                    <p class="card-text text-muted">
+                    <p class="card-text text-muted mb-1">
                         {{ book.author }}
                     </p>
 
-                    <p class="small text-primary">
+                    <p class="small text-primary mb-0">
                         {{ book.category.name }}
                     </p>
                 </div>
@@ -88,11 +87,11 @@
 
     <h2 class="mb-4">Recommended for You</h2>
 
-    <div class="row g-4">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
 
         {% for item in recommended_items %}
 
-        <div class="col-md-4 col-lg-3 col-sm-6">
+        <div class="col">
             <div class="card book-card h-100 shadow-sm">
 
                 <a href="{{ url_for('book_details', book_id=item.book.id) }}" class="text-decoration-none">
@@ -116,6 +115,16 @@
 
                 <div class="card-body d-flex flex-column">
 
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge {{ item.badge_class }}">
+                            {{ item.confidence }}
+                        </span>
+
+                        <span class="small fw-bold text-success">
+                            {{ item.score }}%
+                        </span>
+                    </div>
+
                     <h5 class="card-title">
                         <a href="{{ url_for('book_details', book_id=item.book.id) }}"
                            class="text-dark text-decoration-none">
@@ -128,13 +137,13 @@
                     </p>
 
                     <p class="small text-primary mb-2">
-                        Category: {{ item.book.category.name }}
+                        {{ item.book.category.name }}
                     </p>
 
                     <div class="mb-3">
                         <div class="d-flex justify-content-between">
-                            <small class="fw-bold">Match Score</small>
-                            <small class="fw-bold text-success">{{ item.score }}%</small>
+                            <small class="fw-bold">Similarity Score</small>
+                            <small class="fw-bold">{{ item.score }}%</small>
                         </div>
 
                         <div class="progress mt-1">
@@ -144,18 +153,24 @@
                         </div>
                     </div>
 
-                    <p class="small flex-grow-1">
-                        Recommended because it is similar to books you liked, such as:
-                    </p>
+                    <div class="recommendation-explanation flex-grow-1">
+                        <p class="small mb-1 fw-bold">
+                            Recommended because you liked:
+                        </p>
 
-                    <ul class="small text-muted">
-                        {% for title in item.reason %}
-                            <li>{{ title }}</li>
-                        {% endfor %}
-                    </ul>
+                        <ul class="small text-muted mb-2">
+                            {% for title in item.reason %}
+                                <li>{{ title }}</li>
+                            {% endfor %}
+                        </ul>
+
+                        <p class="small text-muted mb-0">
+                            The system compared title, author, category and description using TF-IDF and Cosine Similarity.
+                        </p>
+                    </div>
 
                     <a href="{{ url_for('book_details', book_id=item.book.id) }}"
-                       class="btn btn-outline-primary btn-sm w-100 mt-auto">
+                       class="btn btn-outline-primary btn-sm w-100 mt-3">
                         View Details
                     </a>
 

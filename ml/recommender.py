@@ -4,8 +4,16 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def get_content_based_recommendations(all_books, favorite_books, top_n=8):
-    if not favorite_books:
+def get_content_based_recommendations(
+    all_books,
+    favorite_books,
+    highly_rated_books=None,
+    top_n=8
+):
+    if highly_rated_books is None:
+        highly_rated_books = []
+
+    if not favorite_books and not highly_rated_books:
         return []
 
     books_data = []
@@ -37,20 +45,62 @@ def get_content_based_recommendations(all_books, favorite_books, top_n=8):
     similarity_matrix = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
     favorite_ids = [book.id for book in favorite_books]
-    favorite_titles = [book.title for book in favorite_books]
+    highly_rated_ids = [book.id for book in highly_rated_books]
 
-    favorite_indexes = df[df["id"].isin(favorite_ids)].index.tolist()
+    source_books = []
+
+    for book in favorite_books:
+        source_books.append({
+            "book": book,
+            "weight": 1.0,
+            "type": "favorite"
+        })
+
+    for book in highly_rated_books:
+        source_books.append({
+            "book": book,
+            "weight": 1.3,
+            "type": "high_rating"
+        })
+
+    excluded_ids = list(set(favorite_ids + highly_rated_ids))
 
     recommendation_scores = {}
+    recommendation_reasons = {}
 
-    for favorite_index in favorite_indexes:
-        similarity_scores = list(enumerate(similarity_matrix[favorite_index]))
+    for source in source_books:
+        source_book = source["book"]
+        source_weight = source["weight"]
+        source_type = source["type"]
+
+        source_indexes = df[df["id"] == source_book.id].index.tolist()
+
+        if not source_indexes:
+            continue
+
+        source_index = source_indexes[0]
+        similarity_scores = list(enumerate(similarity_matrix[source_index]))
 
         for index, score in similarity_scores:
             book_id = df.iloc[index]["id"]
 
-            if book_id not in favorite_ids:
-                recommendation_scores[book_id] = recommendation_scores.get(book_id, 0) + score
+            if book_id not in excluded_ids:
+                weighted_score = score * source_weight
+
+                recommendation_scores[book_id] = (
+                    recommendation_scores.get(book_id, 0) + weighted_score
+                )
+
+                if book_id not in recommendation_reasons:
+                    recommendation_reasons[book_id] = []
+
+                reason_text = source_book.title
+
+                if source_type == "high_rating":
+                    reason_text = f"{source_book.title} (high rating)"
+
+                if reason_text not in recommendation_reasons[book_id]:
+                    recommendation_reasons[book_id].append(reason_text)
 
     sorted_recommendations = sorted(
         recommendation_scores.items(),
@@ -69,7 +119,7 @@ def get_content_based_recommendations(all_books, favorite_books, top_n=8):
             recommended_items.append({
                 "book": book,
                 "score": match_score,
-                "reason": favorite_titles[:3]
+                "reason": recommendation_reasons.get(book_id, [])[:3]
             })
 
     return recommended_items

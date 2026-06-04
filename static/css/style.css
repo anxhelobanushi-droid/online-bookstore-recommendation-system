@@ -3,19 +3,32 @@ body {
     background-color: #f8f9fa;
 }
 
-.hero-section {
-    padding: 90px 0;
+.hero-section,
+.books-header,
+.home-hero {
     background: linear-gradient(135deg, #0d1b2a, #1e5eff);
     color: white;
 }
 
-.hero-section h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
+.hero-section {
+    padding: 90px 0;
 }
 
-.hero-section p {
-    font-size: 1.2rem;
+.home-hero {
+    min-height: 430px;
+    display: flex;
+    align-items: center;
+}
+
+.home-hero h1,
+.hero-section h1 {
+    font-size: 4rem;
+    font-weight: 800;
+}
+
+.home-hero p {
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .search-box {
@@ -33,9 +46,104 @@ body {
     transform: translateY(-6px);
 }
 
-footer {
-    background-color: #0d1b2a;
+.book-cover-img {
+    width: 100%;
+    height: 185px;
+    object-fit: contain;
+    padding: 8px;
+    border-radius: 6px 6px 0 0;
+    background-color: #f1f3f5;
+}
+
+.book-cover-placeholder {
+    height: 185px;
+    background: linear-gradient(135deg, #0d1b2a, #1e5eff);
     color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 700;
+    border-radius: 6px 6px 0 0;
+}
+
+.recommendation-cover {
+    background: linear-gradient(135deg, #ffb703, #1e5eff);
+}
+
+.book-card {
+    height: 100%;
+    font-size: 0.84rem;
+}
+
+.book-card .card-body {
+    padding: 11px;
+}
+
+.book-card .card-title {
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.book-card .small {
+    font-size: 0.78rem;
+}
+
+.book-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 54px;
+}
+
+.book-card .btn {
+    font-size: 0.78rem;
+    padding: 5px 8px;
+}
+
+.book-details-cover {
+    width: 100%;
+    max-width: 260px;
+    height: 380px;
+    object-fit: contain;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 10px;
+    margin: auto;
+    display: block;
+}
+
+.book-details-content h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.book-details-content,
+.book-details-content p {
+    font-size: 0.92rem;
+}
+
+.book-details-content .btn,
+.book-details-content .form-select {
+    font-size: 0.85rem;
+}
+
+.profile-stat-card,
+.dashboard-card {
+    border-radius: 16px;
+}
+
+.profile-stat-card h3,
+.dashboard-card h3 {
+    color: #1e5eff;
+    font-weight: 800;
+}
+
+.dashboard-card p {
+    margin-bottom: 0;
+    color: #6c757d;
 }
 
 .auth-section {
@@ -55,78 +163,99 @@ footer {
     color: #0d1b2a;
 }
 
-.books-header {
-    background: linear-gradient(135deg, #0d1b2a, #1e5eff);
+footer {
+    background-color: #0d1b2a;
     color: white;
 }
 
-.books-header h1 {
-    font-weight: 700;
+/* Tablet */
+@media (max-width: 991px) {
+    .home-hero h1,
+    .hero-section h1 {
+        font-size: 3rem;
+    }
+
+    .book-cover-img,
+    .book-cover-placeholder {
+        height: 200px;
+    }
+
+    .book-details-cover {
+        max-width: 240px;
+        height: 350px;
+        margin-bottom: 25px;
+    }
+
+    .book-details-content h1 {
+        font-size: 1.9rem;
+    }
+
+    .table {
+        font-size: 0.85rem;
+    }
 }
 
-.book-cover-placeholder {
-    height: 260px;
-    background: linear-gradient(135deg, #0d1b2a, #1e5eff);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
-    font-weight: 700;
-    border-radius: 6px 6px 0 0;
-}
+/* Mobile */
+@media (max-width: 576px) {
+    .home-hero {
+        min-height: 360px;
+        padding: 40px 15px;
+    }
 
-.recommendation-cover {
-    background: linear-gradient(135deg, #ffb703, #1e5eff);
-}
+    .home-hero h1,
+    .hero-section h1 {
+        font-size: 2.3rem;
+    }
 
-.book-details-cover {
-    height: 520px;
-    background: linear-gradient(135deg, #0d1b2a, #1e5eff);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 8rem;
-    font-weight: 800;
-    border-radius: 18px;
-}
+    .home-hero p,
+    .hero-section p {
+        font-size: 1rem;
+    }
 
-.profile-stat-card {
-    border-radius: 16px;
-}
+    .books-header {
+        padding: 35px 15px !important;
+    }
 
-.profile-stat-card h3 {
-    color: #1e5eff;
-    font-weight: 800;
-}
+    .books-header h1 {
+        font-size: 2rem;
+    }
 
-.dashboard-card {
-    border-radius: 16px;
-}
+    .book-cover-img,
+    .book-cover-placeholder {
+        height: 170px;
+    }
 
-.dashboard-card h3 {
-    color: #1e5eff;
-    font-weight: 800;
-}
+    .book-card .card-title {
+        font-size: 0.88rem;
+    }
 
-.dashboard-card p {
-    margin-bottom: 0;
-    color: #6c757d;
-}
+    .book-card {
+        font-size: 0.78rem;
+    }
 
-.book-cover-img {
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-    border-radius: 6px 6px 0 0;
-    background-color: #f1f3f5;
-}
+    .book-details-cover {
+        max-width: 210px;
+        height: 310px;
+    }
 
-.book-details-img {
-    width: 100%;
-    height: 520px;
-    object-fit: cover;
-    border-radius: 18px;
-    background-color: #f1f3f5;
+    .book-details-content h1 {
+        font-size: 1.6rem;
+    }
+
+    .book-details-content .btn {
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .dashboard-card h3 {
+        font-size: 1.6rem;
+    }
+
+    .table {
+        font-size: 0.78rem;
+    }
+
+    .navbar-nav {
+        text-align: center;
+    }
 }
