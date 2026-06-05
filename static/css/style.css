@@ -559,3 +559,34 @@ html {
         margin-top: 8px;
     }
 }
+
+/* =========================
+   ADMIN BOOKS - MOBILE
+========================= */
+@media (max-width: 768px) {
+
+    /* Total Books & Categories */
+    .stats-card,
+    .dashboard-stat-card {
+        margin-bottom: 20px !important;
+    }
+
+    /* Dashboard & Add New Book buttons */
+    .admin-actions,
+    .action-buttons {
+        margin-top: 25px !important;
+        margin-bottom: 25px !important;
+    }
+
+    .admin-actions .btn,
+    .action-buttons .btn {
+        margin: 8px !important;
+    }
+
+    /* View / Edit / Delete buttons */
+    .table td .btn {
+        display: block;
+        width: 90px;
+        margin: 8px auto !important;
+    }
+}
