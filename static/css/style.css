@@ -511,12 +511,6 @@ body {
     transform: translateY(-3px);
 }
 
-/* =========================
-   ACTIVE NAVBAR LINK
-========================= */
-
-
-
 html {
     scroll-behavior: smooth;
 }
@@ -529,8 +523,6 @@ html {
     color: #1e5eff !important;
     font-weight: 800 !important;
 }
-
-
 
 .username-highlight {
     color: #f59e0b !important;
@@ -551,4 +543,19 @@ html {
 .navbar .username-highlight {
     color: #f59e0b !important;
     font-weight: 800 !important;
+}
+
+@media (max-width: 576px) {
+    .home-hero .btn {
+        display: block;
+        width: 280px;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-bottom: 12px;
+        border-radius: 12px;
+    }
+
+    .home-hero .btn-outline-light {
+        margin-top: 8px;
+    }
 }
