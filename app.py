@@ -27,7 +27,19 @@ def admin_required():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    featured_books = Book.query.limit(8).all()
+    total_books = Book.query.count()
+    total_categories = Category.query.count()
+
+    return render_template(
+        "index.html",
+        featured_books=featured_books,
+        total_books=total_books,
+        total_categories=total_categories
+    )
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 @app.route("/ml-info")
 def ml_info():

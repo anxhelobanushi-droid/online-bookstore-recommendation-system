@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="books-header py-5">
+    <div class="container text-center">
+        <h1>About SmartBooks</h1>
+        <p>
+            An intelligent online library recommendation system powered by Machine Learning.
+        </p>
+    </div>
+</section>
+
+<section class="container py-5">
+
+    <div class="row g-4 align-items-center mb-5">
+
+        <div class="col-lg-6">
+            <h2 class="fw-bold mb-3">What is SmartBooks?</h2>
+
+            <p class="text-muted">
+                SmartBooks is an online book recommendation platform designed to help users discover books
+                based on their interests, favorite books and personal ratings.
+            </p>
+
+            <p class="text-muted">
+                The system combines a modern web interface with Machine Learning techniques to generate
+                personalized recommendations and improve the reading experience.
+            </p>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card about-highlight-card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Project Purpose</h4>
+
+                    <p class="text-muted mb-0">
+                        The main goal of this project is to design and implement a functional recommendation
+                        system for an online library using Python, Flask, SQLAlchemy, Bootstrap and
+                        Machine Learning algorithms.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+            <div class="card about-card shadow-sm border-0 h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="about-icon">📚</div>
+                    <h4 class="fw-bold">Online Library</h4>
+                    <p class="text-muted">
+                        Users can browse books, search by title or author and filter books by category.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card about-card shadow-sm border-0 h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="about-icon">⭐</div>
+                    <h4 class="fw-bold">User Preferences</h4>
+                    <p class="text-muted">
+                        Favorites and ratings are used to understand the reading preferences of each user.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card about-card shadow-sm border-0 h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="about-icon">🤖</div>
+                    <h4 class="fw-bold">Smart Recommendations</h4>
+                    <p class="text-muted">
+                        The system recommends similar books using TF-IDF Vectorization and Cosine Similarity.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-body p-4">
+
+            <h3 class="fw-bold mb-4">Technologies Used</h3>
+
+            <div class="row g-3">
+
+                <div class="col-md-3 col-6">
+                    <div class="about-tech-box">Python</div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="about-tech-box">Flask</div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="about-tech-box">SQLite</div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="about-tech-box">SQLAlchemy</div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="about-tech-box">Bootstrap</div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="about-tech-box">Pandas</div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="about-tech-box">Scikit-learn</div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="about-tech-box">Render</div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+
+                    <h3 class="fw-bold mb-3">Recommendation Method</h3>
+
+                    <p class="text-muted">
+                        SmartBooks uses a Content-Based Filtering approach. Each book is represented
+                        using textual information such as title, author, category and description.
+                    </p>
+
+                    <p class="text-muted">
+                        TF-IDF Vectorization converts book text into numerical vectors, while Cosine
+                        Similarity measures how similar two books are. Books with higher similarity
+                        scores are recommended to the user.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+
+                    <h3 class="fw-bold mb-3">Why This System?</h3>
+
+                    <p class="text-muted">
+                        Online libraries often contain many books, making it difficult for users to find
+                        the most relevant titles. A recommendation system improves navigation and helps
+                        users discover books that match their interests.
+                    </p>
+
+                    <p class="text-muted">
+                        This project demonstrates how Machine Learning can be integrated into a real web
+                        application to provide personalized and practical results.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card about-thesis-card shadow-sm border-0">
+        <div class="card-body p-5 text-center">
+
+            <h3 class="fw-bold mb-3">Master Thesis Project</h3>
+
+            <p class="text-muted mb-4">
+                SmartBooks was developed as part of a Master of Science thesis in Applied Computer Science,
+                focusing on the design and implementation of a Machine Learning based recommendation system
+                for an online bookstore.
+            </p>
+
+            <a href="{{ url_for('books') }}" class="btn btn-primary btn-lg">
+                Explore SmartBooks
+            </a>
+
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}

@@ -5,10 +5,10 @@
 <section class="home-hero">
     <div class="container text-center">
 
-        <h1>SmartBooks</h1>
+        <h1>Discover Your Next Favorite Book</h1>
 
         <p class="lead">
-            Discover books through intelligent recommendations powered by Machine Learning.
+            AI-powered book recommendations tailored to your reading preferences.
         </p>
 
         <div class="mt-4">
@@ -18,56 +18,138 @@
             </a>
 
             {% if session.get("user_id") %}
-
                 <a href="{{ url_for('recommendations') }}" class="btn btn-outline-light btn-lg">
-                    View Recommendations
+                    Get Recommendations
                 </a>
-
             {% else %}
-
                 <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg">
                     Create Account
                 </a>
-
             {% endif %}
 
         </div>
 
     </div>
+</section>
+
+<section class="container-fluid px-4 py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">Popular Books</h2>
+            <p class="text-muted mb-0">
+                Explore selected books from the SmartBooks library.
+            </p>
+        </div>
+
+        <a href="{{ url_for('books') }}" class="btn btn-outline-primary">
+            View All
+        </a>
+
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-8 g-3">
+
+        {% for book in featured_books %}
+
+        <div class="col">
+
+            <div class="card book-card h-100 shadow-sm">
+
+                <a href="{{ url_for('book_details', book_id=book.id) }}" class="text-decoration-none">
+
+                    {% if book.image %}
+                        <img src="{{ url_for('static', filename='images/books/' ~ book.image) }}"
+                             class="book-cover-img"
+                             alt="{{ book.title }}"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                        <div class="book-cover-placeholder d-none">
+                            <span>{{ book.title[0] }}</span>
+                        </div>
+                    {% else %}
+                        <div class="book-cover-placeholder">
+                            <span>{{ book.title[0] }}</span>
+                        </div>
+                    {% endif %}
+
+                </a>
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        <a href="{{ url_for('book_details', book_id=book.id) }}"
+                           class="text-dark text-decoration-none">
+                            {{ book.title }}
+                        </a>
+                    </h5>
+
+                    <p class="small text-muted mb-1">
+                        {{ book.author }}
+                    </p>
+
+                    <p class="small text-primary mb-0">
+                        {{ book.category.name }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
 </section>
 
 <section class="container py-5">
 
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">How SmartBooks Works</h2>
+        <p class="text-muted">
+            A simple and intelligent way to discover books.
+        </p>
+    </div>
+
     <div class="row g-4">
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100 text-center">
+            <div class="card home-feature-card shadow-sm border-0 h-100 text-center"
+                 onclick="window.location.href='{{ url_for('books') }}'">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold">Personalized Recommendations</h4>
+                    <div class="home-feature-icon">📚</div>
+                    <h4 class="fw-bold">Add Favorites</h4>
                     <p class="text-muted">
-                        SmartBooks analyzes your favorite books and suggests similar titles using Machine Learning.
+                        Save books you like to build your personal reading profile.
                     </p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100 text-center">
+            <div class="card home-feature-card shadow-sm border-0 h-100 text-center"
+                 onclick="window.location.href='{{ url_for('books') }}'">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold">Book Library</h4>
+                    <div class="home-feature-icon">⭐</div>
+                    <h4 class="fw-bold">Rate Books</h4>
                     <p class="text-muted">
-                        Explore a structured online library with books from multiple categories.
+                        Rate books from 1 to 5 stars and improve your recommendations.
                     </p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 h-100 text-center">
+            <div class="card home-feature-card shadow-sm border-0 h-100 text-center"
+                 onclick="window.location.href='{{ url_for('books') }}'">
                 <div class="card-body p-4">
-                    <h4 class="fw-bold">Analytics Dashboard</h4>
+                    <div class="home-feature-icon">🤖</div>
+                    <h4 class="fw-bold">Get Recommendations</h4>
                     <p class="text-muted">
-                        Admin users can monitor books, categories, ratings and recommendation statistics.
+                        Receive personalized suggestions based on your preferences.
                     </p>
                 </div>
             </div>
@@ -77,33 +159,54 @@
 
 </section>
 
-<section class="container pb-5">
+<section class="home-stats-section py-5">
 
-    <div class="card shadow-sm border-0">
+    <div class="container">
+
+        <div class="row g-4 text-center">
+
+            <div class="col-md-3 col-6">
+                <h3>{{ total_books }}+</h3>
+                <p>Books</p>
+            </div>
+
+            <div class="col-md-3 col-6">
+                <h3>{{ total_categories }}+</h3>
+                <p>Categories</p>
+            </div>
+
+            <div class="col-md-3 col-6">
+                <h3>AI</h3>
+                <p>Recommendations</p>
+            </div>
+
+            <div class="col-md-3 col-6">
+                <h3>100%</h3>
+                <p>Free Access</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="container py-5">
+
+    <div class="card home-cta-card shadow-sm border-0">
         <div class="card-body p-5 text-center">
 
             <h2 class="fw-bold mb-3">
-                How SmartBooks Works
+                Ready to discover your next great book?
             </h2>
 
             <p class="text-muted mb-4">
-                The system uses Content-Based Filtering, TF-IDF Vectorization and Cosine Similarity
-                to generate personalized book recommendations.
+                Start exploring the SmartBooks library and receive personalized recommendations.
             </p>
 
-            {% if session.get("role") == "admin" %}
-
-                <a href="{{ url_for('ml_info') }}" class="btn btn-primary">
-                    View ML Information
-                </a>
-
-            {% else %}
-
-                <a href="{{ url_for('books') }}" class="btn btn-primary">
-                    Start Exploring
-                </a>
-
-            {% endif %}
+            <a href="{{ url_for('books') }}" class="btn btn-primary btn-lg">
+                Explore Library
+            </a>
 
         </div>
     </div>

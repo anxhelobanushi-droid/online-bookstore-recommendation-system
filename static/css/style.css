@@ -298,3 +298,109 @@ footer {
 .navbar-toggler-icon {
     background-color: #0d1b2a;
 }
+
+.home-hero {
+    min-height: 520px;
+    background: linear-gradient(135deg, #0d1b2a, #1e5eff);
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+.home-hero h1 {
+    font-size: 4.2rem;
+    font-weight: 800;
+    max-width: 900px;
+    margin: 0 auto 20px;
+}
+
+.home-hero p {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.home-feature-card {
+    border-radius: 18px;
+    transition: 0.3s;
+}
+
+.home-feature-card:hover {
+    transform: translateY(-6px);
+}
+
+.home-feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.home-stats-section {
+    background: linear-gradient(135deg, #0d1b2a, #1e5eff);
+    color: white;
+}
+
+.home-stats-section h3 {
+    font-size: 2.4rem;
+    font-weight: 800;
+}
+
+.home-stats-section p {
+    margin-bottom: 0;
+    opacity: 0.9;
+}
+
+.home-cta-card {
+    border-radius: 22px;
+}
+
+@media (max-width: 768px) {
+    .home-hero {
+        min-height: 430px;
+        padding: 40px 15px;
+    }
+
+    .home-hero h1 {
+        font-size: 2.6rem;
+    }
+
+    .home-hero p {
+        font-size: 1rem;
+    }
+}
+
+.home-feature-card {
+    cursor: pointer;
+}
+
+.home-feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.about-card,
+.about-highlight-card,
+.about-thesis-card {
+    border-radius: 20px;
+}
+
+.about-icon {
+    font-size: 2.6rem;
+    margin-bottom: 15px;
+}
+
+.about-tech-box {
+    background: #f1f3f5;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    font-weight: 700;
+    color: #0d1b2a;
+}
+
+.about-tech-box:hover {
+    background: #1e5eff;
+    color: white;
+}
+
+.about-thesis-card {
+    background: linear-gradient(135deg, #ffffff, #eef3ff);
+}
