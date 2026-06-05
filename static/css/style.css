@@ -259,3 +259,42 @@ footer {
         text-align: center;
     }
 }
+
+.navbar {
+    background-color: white !important;
+}
+
+.navbar .nav-link {
+    color: #0d1b2a !important;
+    font-weight: 500;
+}
+
+.navbar .nav-link:hover {
+    color: #1e5eff !important;
+}
+
+.navbar-logo {
+    height: 48px;
+    width: auto;
+}
+
+.navbar-toggler {
+    border-color: #0d1b2a;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-toggler-icon {
+    background-image: none;
+    width: 24px;
+    height: 24px;
+    position: relative;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after,
+.navbar-toggler-icon {
+    background-color: #0d1b2a;
+}
