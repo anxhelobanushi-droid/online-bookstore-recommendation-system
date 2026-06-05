@@ -592,3 +592,14 @@ html {
         margin: 8px auto !important;
     }
 }
+
+@media (min-width: 769px) {
+
+    td.text-center {
+        min-width: 220px;
+    }
+
+    td.text-center .btn {
+        margin-right: 10px;
+    }
+}
