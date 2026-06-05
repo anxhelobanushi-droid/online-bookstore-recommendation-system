@@ -561,32 +561,34 @@ html {
 }
 
 /* =========================
-   ADMIN BOOKS - MOBILE
+   ADMIN BOOKS - MOBILE FIX
 ========================= */
 @media (max-width: 768px) {
 
-    /* Total Books & Categories */
-    .stats-card,
-    .dashboard-stat-card {
-        margin-bottom: 20px !important;
+    /* Distancë mes kartave Total Books dhe Categories */
+    .row.mb-4 > .col-md-3 {
+        margin-bottom: 22px !important;
     }
 
-    /* Dashboard & Add New Book buttons */
-    .admin-actions,
-    .action-buttons {
-        margin-top: 25px !important;
-        margin-bottom: 25px !important;
+    /* Butonat Dashboard dhe Add New Book më poshtë */
+    .row.mb-4 > .col-md-6.text-end {
+        margin-top: 12px !important;
+        margin-bottom: 28px !important;
+        justify-content: center !important;
+        text-align: center !important;
+        gap: 12px;
     }
 
-    .admin-actions .btn,
-    .action-buttons .btn {
-        margin: 8px !important;
+    .row.mb-4 > .col-md-6.text-end .btn {
+        margin-top: 8px !important;
+        margin-bottom: 8px !important;
     }
 
-    /* View / Edit / Delete buttons */
-    .table td .btn {
+    /* View / Edit / Delete njëri poshtë tjetrit */
+    .table td.text-center .btn,
+    .table td.text-center form {
         display: block;
-        width: 90px;
+        width: 95px;
         margin: 8px auto !important;
     }
 }
