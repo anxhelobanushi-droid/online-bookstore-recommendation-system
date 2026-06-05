@@ -41,13 +41,6 @@ def home():
 def about():
     return render_template("about.html")
 
-@app.route("/ml-info")
-def ml_info():
-
-    if not admin_required():
-        return redirect(url_for("login"))
-
-    return render_template("ml_info.html")
 
 @app.route("/dashboard")
 def dashboard():
