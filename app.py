@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from config import Config
-from models import db, User, Category, Book, Favorite, Rating
+from models import db, User, Category, Book, Favorite, Rating, ContactMessage
 from ml.recommender import get_content_based_recommendations
 
 app = Flask(__name__)
@@ -41,6 +41,23 @@ def home():
 def about():
     return render_template("about.html")
 
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    if request.method == "POST":
+        new_message = ContactMessage(
+            full_name=request.form["full_name"],
+            email=request.form["email"],
+            subject=request.form["subject"],
+            message=request.form["message"]
+        )
+
+        db.session.add(new_message)
+        db.session.commit()
+
+        flash("Your message has been sent successfully.", "success")
+        return redirect(url_for("contact"))
+
+    return render_template("contact.html")
 
 @app.route("/dashboard")
 def dashboard():
@@ -127,6 +144,19 @@ def dashboard():
         f1_demo=f1_demo
     )
 
+@app.route("/admin/messages")
+def admin_messages():
+    if not admin_required():
+        return redirect(url_for("login"))
+
+    messages = ContactMessage.query.order_by(
+        ContactMessage.created_at.desc()
+    ).all()
+
+    return render_template(
+        "admin_messages.html",
+        messages=messages
+    )
 
 @app.route("/admin/books")
 def admin_books():

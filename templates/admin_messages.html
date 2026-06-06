@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="books-header py-5">
+    <div class="container text-center">
+        <h1>Contact Messages</h1>
+        <p>
+            View and manage messages sent from the Contact Us page.
+        </p>
+    </div>
+</section>
+
+<section class="container py-5">
+
+    {% for message in messages %}
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+
+                <h4 class="fw-bold">
+                    {{ message.subject }}
+                </h4>
+
+                <p class="mb-1">
+                    <strong>Full Name:</strong> {{ message.full_name }}
+                </p>
+
+                <p class="mb-1">
+                    <strong>Email:</strong> {{ message.email }}
+                </p>
+
+                <p class="mb-3">
+                    <strong>Date:</strong>
+                    {{ message.created_at.strftime('%d/%m/%Y %H:%M') }}
+                </p>
+
+                <hr>
+
+                <p>
+                    {{ message.message }}
+                </p>
+
+                <a href="mailto:{{ message.email }}?subject=Reply: {{ message.subject }}"
+                   class="btn btn-primary">
+                    Reply by Email
+                </a>
+
+            </div>
+        </div>
+
+    {% else %}
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body text-center p-5">
+
+                <h3 class="fw-bold">No messages yet</h3>
+
+                <p class="text-muted">
+                    Contact messages will appear here after users send messages from the Contact Us page.
+                </p>
+
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
+                    Back to Admin
+                </a>
+
+            </div>
+        </div>
+
+    {% endfor %}
+
+</section>
+
+{% endblock %}

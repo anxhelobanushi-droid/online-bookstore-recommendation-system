@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="contact-hero">
+    <div class="container text-center">
+        <h1>Contact Us</h1>
+        <p>
+            We'd love to hear from you. Feel free to contact us with any
+            questions, suggestions or feedback about SmartBooks.
+        </p>
+    </div>
+</section>
+
+<section class="contact-section">
+    <div class="container">
+
+        <div class="row g-4 align-items-stretch">
+
+            <div class="col-lg-7">
+
+                <div class="contact-card">
+
+                    <h2>Send a Message</h2>
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="full_name" class="form-control" required>
+                        </div>
+                    
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                    
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <input type="text" name="subject" class="form-control" required>
+                        </div>
+                    
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea name="message" class="form-control" rows="6" required></textarea>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary w-100">
+                            Send Message
+                        </button>
+                    
+                    </form>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-5">
+
+                <div class="contact-card faq-compact-card">
+
+                    <h2>Frequently Asked Questions</h2>
+
+                    <div class="faq-card compact-faq">
+                        <h5>How does SmartBooks generate recommendations?</h5>
+                        <p>
+                            SmartBooks uses Content-Based Filtering, TF-IDF Vectorization
+                            and Cosine Similarity.
+                        </p>
+                    </div>
+
+                    <div class="faq-card compact-faq">
+                        <h5>Do I need an account?</h5>
+                        <p>
+                            Yes. An account allows you to save favorites, rate books and
+                            receive personalized recommendations.
+                        </p>
+                    </div>
+
+                    <div class="faq-card compact-faq">
+                        <h5>Is SmartBooks free?</h5>
+                        <p>
+                            Yes. SmartBooks is completely free to use.
+                        </p>
+                    </div>
+
+                    <div class="faq-card compact-faq">
+                        <h5>How do I get better recommendations?</h5>
+                        <p>
+                            Add books to your favorites and rate books you have read.
+                            The more interactions you make, the more accurate your recommendations become.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
