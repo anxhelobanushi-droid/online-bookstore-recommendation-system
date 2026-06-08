@@ -4,159 +4,144 @@
 
 <section class="container py-5">
 
-    <div class="row g-5 align-items-center">
+    <div class="row g-5 book-details-row align-items-stretch">
 
-        <div class="col-md-3">
+        <!-- LEFT SIDE: COVER + ACTIONS -->
+        <div class="col-lg-4 d-flex">
 
-            {% if book.image %}
-                <img src="{{ url_for('static', filename='images/books/' ~ book.image) }}"
-                     class="book-details-cover shadow"
-                     alt="{{ book.title }}"
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="book-side-panel shadow-sm h-100 w-100">
 
-                <div class="book-details-cover shadow d-none">
-                    <span>{{ book.title[0] }}</span>
-                </div>
-            {% else %}
-                <div class="book-details-cover shadow">
-                    <span>{{ book.title[0] }}</span>
-                </div>
-            {% endif %}
+                {% if book.image %}
+                    <img src="{{ url_for('static', filename='images/books/' ~ book.image) }}"
+                         class="book-details-img"
+                         alt="{{ book.title }}"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
 
-        </div>
+                    <div class="book-details-cover d-none">
+                        <span>{{ book.title[0] }}</span>
+                    </div>
+                {% else %}
+                    <div class="book-details-cover">
+                        <span>{{ book.title[0] }}</span>
+                    </div>
+                {% endif %}
 
-        <div class="col-md-9 book-details-content">
+                <div class="book-meta-box mt-4">
 
-            <span class="badge bg-primary mb-3">
-                {{ book.category.name }}
-            </span>
+                    <span class="badge bg-primary mb-3">
+                        {{ book.category.name }}
+                    </span>
 
-            <h1 class="fw-bold">
-                {{ book.title }}
-            </h1>
+                    <p><strong>Author:</strong> {{ book.author }}</p>
+                    <p><strong>Published Year:</strong> {{ book.published_year }}</p>
 
-            <h5 class="text-muted mb-3">
-                by {{ book.author }}
-            </h5>
+                    <p>
+                        <strong>Average Rating:</strong>
+                        {% if average_rating %}
+                            {{ average_rating }} / 5 ⭐
+                            <span class="text-muted">({{ rating_count }} ratings)</span>
+                        {% else %}
+                            No ratings yet
+                        {% endif %}
+                    </p>
 
-            <p class="text-muted">
-                Published Year: {{ book.published_year }}
-            </p>
+                    {% if session.get("user_id") %}
 
-            {% if average_rating %}
-                <p class="mb-2">
-                    <strong>Average Rating:</strong>
-                    {{ average_rating }} / 5
-                    <span class="text-warning">★</span>
-                    <span class="text-muted">({{ rating_count }} ratings)</span>
-                </p>
-            {% else %}
-                <p class="text-muted">
-                    No ratings yet.
-                </p>
-            {% endif %}
+                        <hr>
 
-            <p class="lead mt-3">
-                {{ book.description }}
-            </p>
-
-            {% if session.get("user_id") %}
-
-                <div class="card border-0 shadow-sm my-4">
-
-                    <div class="card-body">
-
-                        <h5 class="fw-bold mb-3">
-                            Rate this book
-                        </h5>
+                        <h5 class="fw-bold mb-3">Rate this book</h5>
 
                         {% if user_rating %}
-    <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p class="text-success small">
+                                Your current rating: {{ user_rating }} / 5 ⭐
+                            </p>
+                        {% endif %}
 
-        <p class="text-success mb-0">
-            Your current rating: {{ user_rating }} / 5 ★
-        </p>
+                        <form method="POST"
+                              action="{{ url_for('rate_book', book_id=book.id) }}"
+                              class="rating-form">
 
-        <form method="POST"
-      action="{{ url_for('remove_rating', book_id=book.id) }}">
+                            <select name="rating" class="form-select form-select-sm mb-2" required>
+                                <option value="">Choose rating</option>
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
 
-            <button type="submit" class="btn btn-outline-danger btn-sm">
-                Remove Rating
-            </button>
-
-        </form>
-
-    </div>
-{% endif %}
-
-                        <form method="POST" action="{{ url_for('rate_book', book_id=book.id) }}">
-
-                            <div class="row g-2 align-items-center">
-
-                                <div class="col-md-8">
-
-                                    <select name="rating" class="form-select" required>
-                                        <option value="">Choose rating</option>
-                                        <option value="1">1 - Poor</option>
-                                        <option value="2">2 - Fair</option>
-                                        <option value="3">3 - Good</option>
-                                        <option value="4">4 - Very Good</option>
-                                        <option value="5">5 - Excellent</option>
-                                    </select>
-
-                                </div>
-
-                                <div class="col-md-4">
-
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        Submit Rating
-                                    </button>
-
-                                </div>
-
-                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                Submit Rating
+                            </button>
 
                         </form>
 
-                    </div>
+                        {% if user_rating %}
+                            <form method="POST"
+                                  action="{{ url_for('remove_rating', book_id=book.id) }}"
+                                  class="mt-2">
+                                <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                    Remove Rating
+                                </button>
+                            </form>
+                        {% endif %}
 
-                </div>
+                        <div class="book-actions mt-3">
 
-            {% endif %}
+                            {% if is_favorite %}
+                                <a href="{{ url_for('remove_favorite', book_id=book.id) }}"
+                                   class="btn btn-success btn-sm w-100 mb-2">
+                                    Added to Favorites
+                                </a>
+                            {% else %}
+                                <a href="{{ url_for('add_favorite', book_id=book.id) }}"
+                                   class="btn btn-warning btn-sm w-100 mb-2">
+                                    Add to Favorites
+                                </a>
+                            {% endif %}
 
-            <div class="mt-4">
+                            <a href="{{ url_for('books') }}"
+                               class="btn btn-outline-secondary btn-sm w-100">
+                                Back to Books
+                            </a>
 
-                {% if session.get("user_id") %}
-
-                    {% if is_favorite %}
-
-                    <a href="{{ url_for('remove_favorite', book_id=book.id) }}"
-                    class="btn btn-outline-danger btn-lg">
-                     Remove from Favorites
-                 </a>
+                        </div>
 
                     {% else %}
 
-                        <a href="{{ url_for('add_favorite', book_id=book.id) }}"
-                           class="btn btn-warning btn-lg">
-                            Add to Favorites
+                        <a href="{{ url_for('login') }}"
+                           class="btn btn-outline-primary btn-sm w-100 mt-3">
+                            Login to Rate or Save
                         </a>
 
                     {% endif %}
 
-                {% else %}
+                </div>
 
-                    <a href="{{ url_for('login') }}"
-                       class="btn btn-primary btn-lg">
-                        Login to Save This Book
-                    </a>
+            </div>
 
-                {% endif %}
+        </div>
 
-                <a href="{{ url_for('books') }}"
-                   class="btn btn-outline-secondary btn-lg ms-2">
-                    Back to Books
-                </a>
+        <!-- RIGHT SIDE: DESCRIPTION -->
+        <div class="col-lg-8 d-flex">
+
+            <div class="book-info-panel shadow-sm h-100 w-100">
+
+                <h1 class="fw-bold mb-2">
+                    {{ book.title }}
+                </h1>
+
+                <p class="text-muted mb-4">
+                    by {{ book.author }}
+                </p>
+
+                <h3 class="fw-bold mb-3">
+                    About this Book
+                </h3>
+
+                <p class="book-detail-description">
+                    {{ book.description }}
+                </p>
 
             </div>
 
@@ -168,65 +153,37 @@
 
 <section class="container pb-5">
 
-    <h2 class="fw-bold mb-4">
-        Similar Books
-    </h2>
+    <h2 class="fw-bold mb-4">Similar Books</h2>
 
     <div class="row g-4">
 
-        {% for similar_book in similar_books %}
+        {% for similar in similar_books %}
 
-        <div class="col-md-4 col-lg-3 col-sm-6">
-
+        <div class="col-md-3 col-sm-6">
             <div class="card book-card h-100 shadow-sm">
 
-                <a href="{{ url_for('book_details', book_id=similar_book.id) }}" class="text-decoration-none">
-
-                    {% if similar_book.image %}
-                        <img src="{{ url_for('static', filename='images/books/' ~ similar_book.image) }}"
+                <a href="{{ url_for('book_details', book_id=similar.id) }}">
+                    {% if similar.image %}
+                        <img src="{{ url_for('static', filename='images/books/' ~ similar.image) }}"
                              class="book-cover-img"
-                             alt="{{ similar_book.title }}"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-
-                        <div class="book-cover-placeholder recommendation-cover d-none">
-                            <span>{{ similar_book.title[0] }}</span>
-                        </div>
+                             alt="{{ similar.title }}">
                     {% else %}
-                        <div class="book-cover-placeholder recommendation-cover">
-                            <span>{{ similar_book.title[0] }}</span>
+                        <div class="book-cover-placeholder">
+                            <span>{{ similar.title[0] }}</span>
                         </div>
                     {% endif %}
-
                 </a>
 
                 <div class="card-body">
+                    <h5 class="card-title">{{ similar.title }}</h5>
+                    <p class="small text-muted">{{ similar.author }}</p>
 
-                    <h5 class="card-title">
-                        <a href="{{ url_for('book_details', book_id=similar_book.id) }}"
-                           class="text-dark text-decoration-none">
-                            {{ similar_book.title }}
-                        </a>
-                    </h5>
-
-                    <p class="text-muted mb-1">
-                        {{ similar_book.author }}
-                    </p>
-
-                    <p class="small text-primary mb-0">
-                        {{ similar_book.category.name }}
-                    </p>
-
+                    <a href="{{ url_for('book_details', book_id=similar.id) }}"
+                       class="btn btn-outline-primary btn-sm w-100">
+                        View Details
+                    </a>
                 </div>
 
-            </div>
-
-        </div>
-
-        {% else %}
-
-        <div class="col-12">
-            <div class="alert alert-info">
-                No similar books found for this category.
             </div>
         </div>
 

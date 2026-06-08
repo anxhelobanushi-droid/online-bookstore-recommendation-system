@@ -29,12 +29,20 @@
 
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" required>
+                                <input type="email"
+                                        name="email"
+                                        class="form-control"
+                                        pattern="^[A-Za-z0-9]+@(gmail|icloud|yahoo|hotmail|outlook)\.(com|al|net|org)$"
+                                        title="Use a valid email such as example@gmail.com" required>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
-                                <input type="password" class="form-control" name="password" required>
+                                <input type="password"
+                                        name="password"
+                                        class="form-control"
+                                        pattern="^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]+$"
+                                        title="Password can contain letters, numbers and symbols." required>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100">

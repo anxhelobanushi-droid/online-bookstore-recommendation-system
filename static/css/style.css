@@ -713,3 +713,120 @@ CONTACT PAGE
     .contact-section .contact-card {
         height: 100%;
     }
+
+/* =========================
+   BOOK DETAILS NEW LAYOUT
+========================= */
+
+.book-side-panel,
+.book-info-panel {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+}
+
+.book-side-panel {
+    text-align: center;
+}
+
+.book-side-panel .book-details-img {
+    width: 100%;
+    max-width: 260px;
+    height: 360px;
+    object-fit: contain;
+    background: #f8f9fa;
+    border-radius: 14px;
+    padding: 10px;
+    margin: 0 auto;
+    display: block;
+}
+
+.book-side-panel .book-details-cover {
+    width: 100%;
+    max-width: 260px;
+    height: 360px;
+    margin: 0 auto;
+    border-radius: 14px;
+    font-size: 5rem;
+}
+
+.book-meta-box {
+    text-align: left;
+    font-size: 0.88rem;
+}
+
+.book-meta-box p {
+    margin-bottom: 8px;
+}
+
+.book-meta-box h5 {
+    font-size: 1rem;
+}
+
+.rating-form .form-select {
+    font-size: 0.82rem;
+}
+
+.book-actions .btn,
+.rating-form .btn {
+    font-size: 0.82rem;
+    padding: 6px 10px;
+}
+
+.book-info-panel h1 {
+    font-size: 2.5rem;
+}
+
+.book-info-panel h3 {
+    font-size: 1.5rem;
+}
+
+.book-detail-description {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #495057;
+    text-align: justify;
+}
+
+@media (max-width: 768px) {
+    .book-info-panel h1 {
+        font-size: 2rem;
+    }
+
+    .book-side-panel,
+    .book-info-panel {
+        padding: 18px;
+    }
+
+    .book-side-panel .book-details-img {
+        height: 320px;
+    }
+}
+
+/* =========================
+   BOOK DETAILS SAME HEIGHT
+========================= */
+
+.book-details-row {
+    align-items: stretch !important;
+}
+
+.book-details-row > .col-lg-4,
+.book-details-row > .col-lg-8 {
+    display: flex;
+}
+
+.book-side-panel,
+.book-info-panel {
+    height: 100%;
+    width: 100%;
+}
+
+.book-info-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.book-detail-description {
+    flex-grow: 1;
+}

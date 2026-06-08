@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -24,6 +25,14 @@ def admin_required():
 
     return True
 
+def is_valid_email(email):
+    pattern = r"^[A-Za-z0-9]+@(gmail|icloud|yahoo|hotmail|outlook)\.(com|al|net|org)$"
+    return re.match(pattern, email) is not None
+
+
+def is_valid_password(password):
+    pattern = r"^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':\"\\|,.<>\/?]+$"
+    return re.match(pattern, password) is not None
 
 @app.route("/")
 def home():
@@ -693,6 +702,14 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
 
+        if not is_valid_email(email):
+            flash("Please enter a valid email address, for example: example@gmail.com", "danger")
+            return redirect(url_for("register"))
+
+        if not is_valid_password(password):
+            flash("Password can contain only letters, numbers and symbols.", "danger")
+            return redirect(url_for("register"))
+
         existing_user = User.query.filter(
             (User.username == username) | (User.email == email)
         ).first()
@@ -725,6 +742,14 @@ def login():
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
+
+        if not is_valid_email(email):
+            flash("Please enter a valid email address, for example: example@gmail.com", "danger")
+            return redirect(url_for("login"))
+
+        if not is_valid_password(password):
+            flash("Password can contain only letters, numbers and symbols.", "danger")
+            return redirect(url_for("login"))
 
         user = User.query.filter_by(email=email).first()
 
